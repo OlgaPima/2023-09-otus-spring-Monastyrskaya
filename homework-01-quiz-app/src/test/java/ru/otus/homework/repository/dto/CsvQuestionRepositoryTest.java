@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj .core.api.Assertions.assertThat;
 
-public class QuestionDtoCreatorTest {
+public class CsvQuestionRepositoryTest {
 
     private static final String CSV_DELIMITER = ";";
     private static final String CSV_CHARSET = "UTF-8";

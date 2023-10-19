@@ -9,8 +9,5 @@ public class Main {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
         QuizService quizService = context.getBean(QuizService.class);
         quizService.askQuestions();
-
-        // Данная операция в принципе не нужна. Мы не работаем здесь с БД, а Spring Boot сделает закрытие за нас
-        context.close();
     }
 }
