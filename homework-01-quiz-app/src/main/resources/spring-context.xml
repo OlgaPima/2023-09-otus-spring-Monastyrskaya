@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="quizConfig" class="ru.otus.homework.config.QuizConfig">
+        <constructor-arg index="0" value="questions.csv"/>
+        <constructor-arg index="1" value=";"/>
+        <constructor-arg index="2" value="UTF-8"/>
+    </bean>
+
+    <bean id="csvQuestionsRepository" class="ru.otus.homework.repository.CsvQuestionsRepository">
+        <constructor-arg index="0" ref="quizConfig"/>
+    </bean>
+
+    <bean id="ioService" class="ru.otus.homework.service.IOServiceStreamImpl">
+        <constructor-arg index="0">
+            <util:constant static-field="java.lang.System.out"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="quizServiceImpl" class="ru.otus.homework.service.QuizServiceImpl" >
+        <constructor-arg index="0" ref="csvQuestionsRepository"/>
+        <constructor-arg index="1" ref="ioService"/>
+    </bean>
+</beans>
