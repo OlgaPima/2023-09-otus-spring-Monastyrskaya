@@ -1,12 +1,15 @@
 package ru.otus.homework.repository.dto;
 
+import org.springframework.stereotype.Component;
 import ru.otus.homework.exception.CsvParsingException;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Component
 public class QuestionDtoCreator {
-    public static QuestionDto parseFromCsv(String csvString, String delimiter) throws CsvParsingException {
+
+    public QuestionDto parseFromCsv(String csvString, String delimiter) throws CsvParsingException {
         List<String> questionAttributes = Arrays.asList(csvString.split(delimiter));
         if (questionAttributes.size() < 3) {
             throw new CsvParsingException("Не указаны все необходимые атрибуты вопроса: порядковый номер, текст вопроса, текст ответа");

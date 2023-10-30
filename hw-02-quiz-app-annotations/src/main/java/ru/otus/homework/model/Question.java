@@ -9,5 +9,9 @@ public class Question {
 
     private final int orderNum;
     private final String questionText;
-    private final String answerText;
+    private final String rightAnswerText;
+
+    public boolean isAnswerRight(String answerText) {
+        return answerText.trim().equalsIgnoreCase(rightAnswerText.trim());
+    }
 }

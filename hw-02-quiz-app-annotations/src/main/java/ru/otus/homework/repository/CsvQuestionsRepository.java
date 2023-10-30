@@ -3,8 +3,7 @@ package ru.otus.homework.repository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.otus.homework.config.QuestionsConfig;
-import ru.otus.homework.model.Question;
+import ru.otus.homework.config.QuestionsStorageConfig;
 import ru.otus.homework.repository.dto.QuestionDto;
 import ru.otus.homework.repository.dto.QuestionDtoCreator;
 import ru.otus.homework.exception.CsvParsingException;
@@ -20,17 +19,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CsvQuestionsRepository implements QuestionsRepository {
 
-    private final QuestionsConfig questionsConfig;
+    private final QuestionsStorageConfig questionsConfig;
+    private final QuestionDtoCreator questionDtoCreator;
 
     @Getter
     private List<QuestionDto> questionsList;
 
-//    public CsvQuestionsRepository(QuestionsConfig questionsConfig) {
-//        this.questionsConfig = questionsConfig;
-//    }
-
     @Override
-    public List<QuestionDto> readAll() throws Exception {
+    public List<QuestionDto> findAll() throws Exception {
         if (questionsList == null) {
             questionsList = new ArrayList<>();
         }
@@ -47,7 +43,7 @@ public class CsvQuestionsRepository implements QuestionsRepository {
             String row;
             while ((row = reader.readLine()) != null) {
                 rowNumber++;
-                var questionDto = QuestionDtoCreator.parseFromCsv(row, questionsConfig.getFieldsDelimiter());
+                var questionDto = questionDtoCreator.parseFromCsv(row, questionsConfig.getFieldsDelimiter());
                 questionsList.add(questionDto);
             }
             return questionsList;

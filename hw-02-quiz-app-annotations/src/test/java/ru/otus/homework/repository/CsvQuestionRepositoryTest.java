@@ -1,9 +1,12 @@
-package ru.otus.homework.repository.dto;
+package ru.otus.homework.repository;
 
 import org.junit.jupiter.api.*;
-import ru.otus.homework.config.QuestionsConfig;
+import ru.otus.homework.config.QuestionsStorageConfig;
 import ru.otus.homework.exception.CsvParsingException;
 import ru.otus.homework.repository.CsvQuestionsRepository;
+import ru.otus.homework.repository.dto.QuestionDto;
+import ru.otus.homework.repository.dto.QuestionDtoCreator;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,9 +20,8 @@ public class CsvQuestionRepositoryTest {
     @Test
     @DisplayName("Чтение корректного csv-файла с 2 вопросами")
     public void checkReadingGoodCsvFile() throws Exception {
-        var questionsConfig = new QuestionsConfig("NormalFile.csv", CSV_DELIMITER, CSV_CHARSET);
-        var csvQuestionsRepository = new CsvQuestionsRepository(questionsConfig);
-        List<QuestionDto> questions = csvQuestionsRepository.readAll();
+        var csvQuestionsRepository = createTestRepository("NormalFile.csv");
+        List<QuestionDto> questions = csvQuestionsRepository.findAll();
         assertThat(questions).isNotNull();
         assertThat(questions.size()).isEqualTo(2);
     }
@@ -27,9 +29,8 @@ public class CsvQuestionRepositoryTest {
     @Test
     @DisplayName("Чтение пустого csv-файла")
     public void checkReadingEmptyCsvFile() throws Exception {
-        var quizConfig = new QuestionsConfig("EmptyFile.csv", CSV_DELIMITER, CSV_CHARSET);
-        var csvQuestionsRepository = new CsvQuestionsRepository(quizConfig);
-        List<QuestionDto> questions = csvQuestionsRepository.readAll();
+        var csvQuestionsRepository = createTestRepository("EmptyFile.csv");
+        List<QuestionDto> questions = csvQuestionsRepository.findAll();
         assertThat(questions).isNotNull();
         assertThat(questions.size()).isEqualTo(0);
     }
@@ -37,18 +38,21 @@ public class CsvQuestionRepositoryTest {
     @Test
     @DisplayName("Чтение испорченного csv-файла (2 колонки вместо 3)")
     public void checkReadingCorruptedCsvFile() {
-        var quizConfig = new QuestionsConfig("CorruptedFile.csv", CSV_DELIMITER, CSV_CHARSET);
-        var csvQuestionsRepository = new CsvQuestionsRepository(quizConfig);
-        Exception e = assertThrows(CsvParsingException.class, () -> csvQuestionsRepository.readAll());
+        var csvQuestionsRepository = createTestRepository("CorruptedFile.csv");
+        Exception e = assertThrows(CsvParsingException.class, () -> csvQuestionsRepository.findAll());
         assertThat(e.getMessage()).startsWith("Не указаны все необходимые атрибуты вопроса");
     }
 
     @Test
     @DisplayName("Чтение испорченного csv-файла (некорректный номер вопроса)")
     public void checkReadingCorroptedCsvFile2() {
-        var quizConfig = new QuestionsConfig("CorruptedFile2.csv", CSV_DELIMITER, CSV_CHARSET);
-        var csvQuestionsRepository = new CsvQuestionsRepository(quizConfig);
-        Exception e = assertThrows(CsvParsingException.class, () -> csvQuestionsRepository.readAll());
+        var csvQuestionsRepository = createTestRepository("CorruptedFile2.csv");
+        Exception e = assertThrows(CsvParsingException.class, () -> csvQuestionsRepository.findAll());
         assertThat(e.getMessage()).startsWith("Недопустимый порядковый номер вопроса");
+    }
+
+    private CsvQuestionsRepository createTestRepository(String fileName) {
+        var quizConfig = new QuestionsStorageConfig(fileName, CSV_DELIMITER, CSV_CHARSET);
+        return new CsvQuestionsRepository(quizConfig, new QuestionDtoCreator());
     }
 }
