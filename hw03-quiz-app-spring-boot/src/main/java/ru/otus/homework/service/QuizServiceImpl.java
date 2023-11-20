@@ -29,7 +29,7 @@ public class QuizServiceImpl implements QuizService {
             ioService.printLine("");
             ioService.printLineLocalized("quiz.beforeStart");
 
-            var quizResult = new QuizResult(student, appConfig);
+            var quizResult = new QuizResult(student, appConfig.getAnswersToPass());
             for (var question : questions) {
                 String answer = ioService.readStringWithPrompt(String.format("%d. %s", question.getOrderNum(), question.getQuestionText()));
                 quizResult.addAnswer(question, answer);
@@ -41,13 +41,6 @@ public class QuizServiceImpl implements QuizService {
         }
         return null;
     }
-
-//    @Override
-//    public void printAllQuestions() {
-//        List<Question> questions = getAllQuestions();
-//        ioService.printFormattedLineLocalized("quiz.printAllQuestions", String.valueOf(questions.size()));
-//        questions.forEach(q -> System.out.println(q.getQuestionText()));
-//    }
 
     @Override
     public List<Question> getAllQuestions() {

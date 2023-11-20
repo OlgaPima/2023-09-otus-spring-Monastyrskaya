@@ -2,7 +2,7 @@ package ru.otus.homework.repository;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.homework.config.QuestionsConfig;
 import ru.otus.homework.exception.CsvParsingException;
 import ru.otus.homework.repository.dto.QuestionDto;
@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class CsvQuestionsRepository implements QuestionsRepository {
 
@@ -28,7 +28,7 @@ public class CsvQuestionsRepository implements QuestionsRepository {
     private List<QuestionDto> questionsList;
 
     @Override
-    public List<QuestionDto> findAll() throws Exception {
+    public List<QuestionDto> findAll() throws RuntimeException {
         if (questionsList == null) {
             questionsList = new ArrayList<>();
         }
@@ -58,7 +58,7 @@ public class CsvQuestionsRepository implements QuestionsRepository {
         catch (IOException e) {
             ioService.printFormattedLineLocalized("questions.ioException" + e.getMessage());
             e.printStackTrace();
-            throw e;
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

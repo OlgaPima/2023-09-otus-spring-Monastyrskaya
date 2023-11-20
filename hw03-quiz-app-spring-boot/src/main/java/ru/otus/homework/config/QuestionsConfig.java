@@ -1,30 +1,23 @@
 package ru.otus.homework.config;
 
 import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-
-@Setter
+@Getter
 @Component
-@ConfigurationProperties(prefix = "questions")
 public class QuestionsConfig {
-    @Getter
-    private String fieldsDelimiter;
-    @Getter
-    private String fileCharset;
 
-    private HashMap<String, String> fileNameByLocaleTag;
+    private final String fieldsDelimiter;
+    private final String fileCharset;
+    private final String questionsFileName;
 
-    @Autowired
-    private AppConfig appConfig; //через поле - нехорошо, но иначе придется либо объединять AppConfig и QuestionsConfig,
-    // либо выставлять наружу сеттер для данного поля, что тоже нехорошо
-
-    public String getQuestionsFileName() {
-        return fileNameByLocaleTag.get(appConfig.getLocale());
+    public QuestionsConfig(@Value("${questions.fields-delimiter}") String fieldsDelimiter,
+                           @Value("${questions.file-charset}") String fileCharset,
+                           FileNameConfig fileNameConfig,
+                           @Value("${application.locale}") String locale) {
+        this.fieldsDelimiter = fieldsDelimiter;
+        this.fileCharset = fileCharset;
+        this.questionsFileName = fileNameConfig.getFileName(locale);
     }
-
 }

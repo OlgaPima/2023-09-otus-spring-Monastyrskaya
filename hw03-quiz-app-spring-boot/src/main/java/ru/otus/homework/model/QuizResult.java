@@ -2,8 +2,6 @@ package ru.otus.homework.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import ru.otus.homework.config.AppConfig;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +9,10 @@ import java.util.Map;
 public class QuizResult {
     @Getter
     private final Student student;
-    @Getter
-    private final AppConfig appConfig;
+    /**
+     * Количество правильных ответов для прохождения теста
+     */
+    private final int answersCntToPassTest;
 
     private Map<Question, String> answers = new HashMap<>();
 
@@ -21,7 +21,7 @@ public class QuizResult {
     }
 
     public boolean isTestPassed() {
-        return getRightAnswersCount() >= appConfig.getAnswersToPass();
+        return getRightAnswersCount() >= answersCntToPassTest;
     }
 
     public int getRightAnswersCount() {

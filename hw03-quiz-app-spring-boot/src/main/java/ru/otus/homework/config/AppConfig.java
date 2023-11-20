@@ -1,25 +1,20 @@
 package ru.otus.homework.config;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.context.properties.bind.ConstructorBinding;
-import org.springframework.stereotype.Component;
 
 @Getter
-@Setter
-@Component
-//@EnableConfigurationProperties(AppConfig.class)
+//@Component //по следам очень доооолгих раскопок. Если включить эту аннотацию, то появляются 2 бина: штатный appConfig
+            // и второй application-ru.otus.homework.appConfig в "unknown location", и приложение не может стартануть - путается в них.
+            // Итого: @ConfigurationProperties нельзя совмещать с @Component
 @ConfigurationProperties(prefix = "application")
 public class AppConfig implements LocaleConfig {
 
-    private int answersToPass;
-    private String locale;
+    private final int answersToPass;
+    private final String locale;
 
-//    @ConstructorBinding //TODO: почему не работает такой конструктор? не видит аргументы answersToPass, locale
-//    public AppConfig(int answersToPass, String locale) {
-//        this.answersToPass = answersToPass;
-//        this.locale = locale;
-//    }
+    public AppConfig(int answersToPass, String locale) {
+        this.answersToPass = answersToPass;
+        this.locale = locale;
+    }
 }

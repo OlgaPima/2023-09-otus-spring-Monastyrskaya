@@ -9,5 +9,5 @@ public interface QuestionsRepository {
      * Метод чтения данных из файла с вопросами
      * @return
      */
-    List<QuestionDto> findAll() throws Exception;
+    List<QuestionDto> findAll() throws RuntimeException;
 }
