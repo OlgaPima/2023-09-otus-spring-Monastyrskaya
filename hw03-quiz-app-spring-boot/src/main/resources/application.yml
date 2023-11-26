@@ -1,0 +1,18 @@
+spring:
+  messages:
+    basename: "i18n/appmessages"
+    encoding: UTF-8
+    #Не дает свалиться в системную локаль если не найден файл для переданной в MessageSource
+    #Если false, то будут браться сообщения из дефолтного файла, если true, то из файла соответствующего системной локали
+    fallback-to-system-locale: false
+
+application:
+  answers-to-pass: 3
+  locale: ru-RU
+
+questions:
+  file-name-by-locale-tag:
+    ru-RU: questions_ru_RU.csv
+    en-US: questions_en_US.csv
+  file-charset: UTF-8
+  fields-delimiter: ;
