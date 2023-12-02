@@ -28,12 +28,19 @@ public class ShellCommandsRunner {
         student = new Student(firstName, lastName);
     }
 
-    private Availability isLastNameCommandAvailable() {
-        return firstName == null? Availability.unavailable("Сначала введите имя"): Availability.available();
-    }
-
     @ShellMethod(key = {"start"})
+    @ShellMethodAvailability(value = "isStartCommandAvailable")
     public void start() {
         testRunnerService.run(student);
+    }
+
+    private Availability isLastNameCommandAvailable() {
+        return firstName == null? Availability.unavailable("Ввод фамилии недоступен: сначала введите свое имя")
+                : Availability.available();
+    }
+
+    private Availability isStartCommandAvailable() {
+        return student == null? Availability.unavailable("Тестирование недоступно: сначала введите свое имя")
+                : Availability.available();
     }
 }
