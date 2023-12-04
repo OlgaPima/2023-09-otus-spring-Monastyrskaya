@@ -1,0 +1,16 @@
+spring:
+  shell:
+    interactive:
+      enabled: false
+  messages:
+    basename: "i18n/appmessages"
+    encoding: UTF-8
+    fallback-to-system-locale: false
+
+application:
+  answers-to-pass: 3
+  locale: ru-RU
+
+questions:
+  file-charset: UTF-8
+  fields-delimiter: ;
