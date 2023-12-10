@@ -28,18 +28,18 @@ public class JdbcBookRepository implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        String sql =
-                "select b.id, b.title, b.author_id, a.full_name as author_name," +
-                "   b.genre_id, g.name as genre_name " +
-                "from books as b " +
-                "   inner join authors as a on b.author_id = a.id " +
-                "   inner join genres as g on b.genre_id = g.id " +
-                "where b.id = :bookId";
+        String sql = """
+                select b.id, b.title, b.author_id, a.full_name as author_name,
+                   b.genre_id, g.name as genre_name
+                from books as b
+                   inner join authors as a on b.author_id = a.id
+                   inner join genres as g on b.genre_id = g.id
+                where b.id = :bookId""";
 
         Map<String, Object> params = Collections.singletonMap("bookId", id);
         try {
-            // здесь .ofNullable, а не .of только чтобы идея не подсвечивала, что может быть null.
-            // Так-то, если прилетит пустой датасет, то свалимся в эксепшр маппера, т.е. .ofNullable тут по сути не нужен
+            // здесь .ofNullable, а не .of, только чтобы идея не подсвечивала, что может быть null.
+            // Так-то, если прилетит пустой датасет, то свалимся в эксепшн маппера, т.е. .ofNullable тут по сути не нужен
             return Optional.ofNullable(jdbcOperations.queryForObject(sql, params, new BookRowMapper()));
         }
         catch (EmptyResultDataAccessException e) {
@@ -49,12 +49,12 @@ public class JdbcBookRepository implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        String sql =
-                "select b.id, b.title, b.author_id, a.full_name as author_name," +
-                "   b.genre_id, g.name as genre_name " +
-                "from books as b " +
-                "   inner join authors as a on b.author_id = a.id " +
-                "   inner join genres as g on b.genre_id = g.id";
+        String sql = """
+                select b.id, b.title, b.author_id, a.full_name as author_name,
+                   b.genre_id, g.name as genre_name
+                from books as b
+                   inner join authors as a on b.author_id = a.id
+                   inner join genres as g on b.genre_id = g.id""";
         return jdbcOperations.query(sql, new BookRowMapper());
     }
 
