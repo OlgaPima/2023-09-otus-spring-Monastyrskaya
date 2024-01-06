@@ -6,9 +6,9 @@ import ru.otus.hw.models.BookComment;
 import java.util.Optional;
 
 public interface BookCommentRepository extends JpaRepository<BookComment, Long> {
-    Optional<BookComment> findById(long id);
+//    Optional<BookComment> findById(long id);
 
     BookComment save(BookComment comment);
 
-    void deleteById(long commentId);
+//    void deleteById(long commentId);
 }

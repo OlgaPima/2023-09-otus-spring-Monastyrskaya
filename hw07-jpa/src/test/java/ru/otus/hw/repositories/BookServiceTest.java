@@ -52,8 +52,8 @@ class BookServiceTest {
         bookService.update(1L, newTitle, newAuthor, newGenre);
         var updatedBook = testEntityManager.find(Book.class, 1);
 
-        var author = authorRepository.findById(2).get();
-        var genre = genreRepository.findById(2).get();
+        var author = authorRepository.findById(2L).get();
+        var genre = genreRepository.findById(2L).get();
 
         assertThat(updatedBook.getTitle()).isEqualTo(newTitle);
         assertThat(updatedBook.getAuthor()).isEqualTo(author);
