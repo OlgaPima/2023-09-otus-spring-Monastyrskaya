@@ -86,9 +86,6 @@ class JdbcBookRepositoryTest {
     @DisplayName("должен сохранять измененную книгу с автором и жанром")
     @Test
     void shouldSaveUpdatedBook() {
-        var testBook = testEntityManager.find(Book.class, 1);
-        testEntityManager.detach(testBook);
-
         var author = authorRepository.findById(2).get();
         var genre = genreRepository.findById(2).get();
         String newTitle = "Updated title";
@@ -107,7 +104,6 @@ class JdbcBookRepositoryTest {
     void shouldDeleteBook() {
         var testBook = testEntityManager.find(Book.class, 1);
         assertThat(testBook).isNotNull();
-        testEntityManager.detach(testBook);
 
         bookRepository.deleteById(1);
         Book deletedBook = testEntityManager.find(Book.class, 1);
