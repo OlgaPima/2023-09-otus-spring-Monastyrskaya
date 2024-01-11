@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>ru.otus.hw</groupId>
-    <artifactId>hw06-hibernate</artifactId>
+    <artifactId>hw08-mongo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>spring-jdbc-demo</name>
 
