@@ -42,7 +42,7 @@
                     <button type="button" class="btn btn-light btn-grid-action">
                         <a th:data-row-id="${author.id}" th:href="@{/authors/delete(id=${author.id})}" title="Удалить"
                            onclick="deleteWithConfirm(this); return false;">
-                            <img src="../static/icons/delete.png" alt=""/>
+                            <img src="../static/icons/delete.png" onclick="aaa(this)" data-base-64="${lsdjfkdsjf}" alt=""/>
                         </a>
                     </button>
                     <div th:if="${session.authorIdChildEntitiesError == author.id}" role="alert"

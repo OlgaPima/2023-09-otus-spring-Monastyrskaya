@@ -35,14 +35,14 @@ public class BookController {
     }
 
     @GetMapping("/books/edit")
-    public String editGenre(@RequestParam(required = false) String id, Model model) {
+    public String editBook(@RequestParam(required = false) String id, Model model) {
         Book book;
         if (id == null || id.isBlank()) {
             book = new Book();
         }
         else {
             book = bookService.findById(id).orElseThrow(
-                    () -> new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage()));
+                    () -> new EntityNotFoundException(Errors.BOOK_NOT_FOUND.getMessage()));
         }
         model.addAttribute("book", book);
         model.addAttribute("authorsList", authorService.findAll());

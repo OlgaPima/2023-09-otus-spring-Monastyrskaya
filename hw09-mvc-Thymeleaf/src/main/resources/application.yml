@@ -5,16 +5,6 @@ spring:
       port: 27017
       database: test
 
-#  shell:
-#    interactive:
-#      enabled: true
-#    noninteractive:
-#      enabled: false
-#
-#    command:
-#      version:
-#        enabled: false
-
 mongock:
   runner-type: "ApplicationRunner" # default
 #  runner-type: "InitializingBean"

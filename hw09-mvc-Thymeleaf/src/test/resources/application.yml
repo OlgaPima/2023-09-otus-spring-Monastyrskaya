@@ -5,11 +5,11 @@ spring:
       database: test
       host: localhost
 
-  shell:
-    interactive:
-      enabled: true
-    noninteractive:
-      enabled: false
+#  shell:
+#    interactive:
+#      enabled: true
+#    noninteractive:
+#      enabled: false
 
     command:
       version:

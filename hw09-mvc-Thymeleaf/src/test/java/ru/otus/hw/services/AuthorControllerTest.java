@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ComponentScan({"ru.otus.hw.services"})
-//@DataMongoTest
+//@ComponentScan({"ru.otus.hw.services"})
+@DataMongoTest
 @WebMvcTest(AuthorController.class)
 //@DisplayName("AuthorController: ")
 public class AuthorControllerTest {

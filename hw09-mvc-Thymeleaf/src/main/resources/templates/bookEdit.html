@@ -30,12 +30,12 @@
                        value="Белый Клык" class="form-control"/>
             </td>
             <td><label class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="width: 100%;">
-                    Некорректное ФИО автора
+                    Некорректное название книги
                 </label>
             </td>
         </tr>
             <tr>
-                <td><label for="author" style="width: 100%;">Автор</label></td>
+                <td><label style="width: 100%;">Автор</label></td>
                 <td>
                     <select th:field="*{author}" class="form-select">>
                         <option value="">--Выберите--</option>
@@ -50,7 +50,7 @@
                 </td>
             </tr>
             <tr>
-                <td><label for="genre" style="width: 100%;">Жанр</label></td>
+                <td><label style="width: 100%;">Жанр</label></td>
                 <td>
                     <select th:field="*{genre}" class="form-select">>
                         <option value="">--Выберите--</option>
