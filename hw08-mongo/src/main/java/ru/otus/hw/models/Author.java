@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 @Document
+@NoArgsConstructor
 public class Author {
     @Id
     private String id;
@@ -17,6 +18,11 @@ public class Author {
     private List<Book> books;
 
     public Author(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public Author(String id, String fullName) {
+        this.id = id;
         this.fullName = fullName;
     }
 }

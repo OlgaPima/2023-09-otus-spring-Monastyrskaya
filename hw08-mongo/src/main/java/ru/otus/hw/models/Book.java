@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document
+@NoArgsConstructor
 public class Book {
     @Id
     private String id;
@@ -20,6 +21,11 @@ public class Book {
     private Genre genre;
 
     public Book(String title, Author author, Genre genre) {
+        this(null, title, author, genre);
+    }
+
+    public Book(String id, String title, Author author, Genre genre) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.genre = genre;
