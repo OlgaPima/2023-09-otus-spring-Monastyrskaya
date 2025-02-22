@@ -9,5 +9,4 @@ public interface BookCommentRepository extends MongoRepository<BookComment, Stri
     BookComment save(BookComment comment);
     List<BookComment> findByBookId(String bookId);
     BookComment findTopByOrderByIdAsc();
-//    BookComment findTop();
 }
