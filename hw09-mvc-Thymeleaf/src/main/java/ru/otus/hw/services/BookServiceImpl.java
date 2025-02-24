@@ -50,6 +50,7 @@ public class BookServiceImpl implements BookService {
         String authorId = book.getAuthor().getId();
         authorRepository.findById(authorId).orElseThrow(() ->
                 new EntityNotFoundException(Errors.AUTHOR_NOT_FOUND.getMessage().formatted(authorId)));
+
         String genreId = book.getGenre().getId();
         genreRepository.findById(genreId).orElseThrow(() ->
                 new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage().formatted(genreId)));

@@ -42,7 +42,7 @@ public class BookController {
         }
         else {
             book = bookService.findById(id).orElseThrow(
-                    () -> new EntityNotFoundException(Errors.BOOK_NOT_FOUND.getMessage()));
+                    () -> new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage()));
         }
         model.addAttribute("book", book);
         model.addAttribute("authorsList", authorService.findAll());
