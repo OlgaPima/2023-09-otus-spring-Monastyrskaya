@@ -28,8 +28,8 @@ public class BookRestController {
                 () -> new EntityNotFoundException(Errors.BOOK_NOT_FOUND.getMessage()));
     }
 
-    @PostMapping("/api/v1/books")
-    public EntitySaveResult<BookDto> saveBook(@Valid BookDto bookDto, BindingResult bindingResult) {
+    @PostMapping(value = "/api/v1/books", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
+    public EntitySaveResult<BookDto> saveBook(@Valid @RequestBody BookDto bookDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new EntitySaveResult<>(bindingResult); // выкидываем ошибки валидации на клиента
         }

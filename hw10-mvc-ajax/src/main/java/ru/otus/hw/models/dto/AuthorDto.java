@@ -27,6 +27,6 @@ public class AuthorDto {
     }
 
     public static AuthorDto fromDomainObject(Author author) {
-        return new AuthorDto(author.getId().toString(), author.getFullName(), author.getBirthYear());
+        return new AuthorDto(author.getId() == null ? null : author.getId().toString(), author.getFullName(), author.getBirthYear());
     }
 }

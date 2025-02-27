@@ -1,21 +1,22 @@
 // Добавление/редактирование строки. Универсальная функция для всех страниц редактирования сущностей (авторы, жанры, книги).
 // Только с комментариями не прокатило, там отдельный код
 function save(editForm, id) {
-    var formArray = $(editForm).serializeArray();
-    var jsonData = {};
+    const formArray = $(editForm).serializeArray();
+    let postedObject = {};
     $.map(formArray, function(i){
-        jsonData[i['name']] = i['value'];
+        postedObject[i['name']] = i['value'];
     });
 
     if (id) {
-        jsonData["id"] = id;
+        postedObject["id"] = id;
     }
 
     $.ajax({
         url: editForm.attributes["data-save-url"].value,
         method: 'post',
+        contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        data: jsonData,
+        data: JSON.stringify(postedObject),
         // Этот блок сработает при каких-то сетевых ошибках, если вызов не дошел до контроллера
         error: function(data) {
             alert("Ошибка сохранения"); // TODO: отображать текст ошибки
@@ -34,7 +35,7 @@ function save(editForm, id) {
                 $("#label-server-error").hide();
                 data.errors.forEach(error => {
                     if (error.fieldName) { // ошибка валидации поля - отображаем валидатор и передаем в него текст
-                        var lblValidator = $("#label-validator-" + error.fieldName);
+                        const lblValidator = $("#label-validator-" + error.fieldName);
                         lblValidator.text(error.errorMessage);
                         lblValidator.show();
                     }

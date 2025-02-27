@@ -26,8 +26,8 @@ public class GenreRestController {
         return GenreDto.fromDomainObject(genreService.findById(id));
     }
 
-    @PostMapping("/api/v1/genres")
-    public EntitySaveResult<GenreDto> saveGenre(@Valid GenreDto genreDto, BindingResult bindingResult) {
+    @PostMapping(value = "/api/v1/genres", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
+    public EntitySaveResult<GenreDto> saveGenre(@Valid @RequestBody GenreDto genreDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new EntitySaveResult<>(bindingResult); // выкидываем ошибки валидации на клиента
         }

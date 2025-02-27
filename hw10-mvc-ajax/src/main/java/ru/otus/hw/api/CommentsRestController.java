@@ -29,9 +29,9 @@ public class CommentsRestController {
         ).collect(Collectors.toList());
     }
 
-    @PostMapping("/api/v1/books/comments")
+    @PostMapping(value = "/api/v1/books/comments", consumes = "application/json;charset=UTF-8", produces = "application/json;charset=UTF-8")
     public EntitySaveResult<BookCommentDto> saveComment(@RequestParam("bookId") Long bookId,
-                                                        @Valid BookCommentDto commentDto, BindingResult bindingResult) {
+                                                        @Valid @RequestBody BookCommentDto commentDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new EntitySaveResult<>(bindingResult); // выкидываем на клиента ошибки валидации
         }
@@ -39,7 +39,6 @@ public class CommentsRestController {
         try {
             BookComment savedComment;
             if (commentDto.getId() == null || commentDto.getId().isBlank()) {
-//                savedComment = commentService.insert(commentDto.getCommentText(), Long.parseLong(commentDto.getBook().getId()));
                 savedComment = commentService.insert(commentDto.getCommentText(), bookId);
             }
             else {

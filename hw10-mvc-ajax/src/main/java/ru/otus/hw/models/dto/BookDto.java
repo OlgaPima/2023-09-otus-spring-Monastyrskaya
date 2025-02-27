@@ -21,16 +21,21 @@ public class BookDto {
     private String title;
 
     @NotNull(message = "Поле обязательно для заполнения")
+//    private AuthorDto author;
     private Author author;
 
     @NotNull(message = "Поле обязательно для заполнения")
+//    private GenreDto genre;
     private Genre genre;
 
     public Book toDomainObject() {
+//        return new Book(id == null || id.isBlank() ? null : Long.parseLong(id), title, author.toDomainObject(), genre.toDomainObject());
         return new Book(id == null || id.isBlank() ? null : Long.parseLong(id), title, author, genre);
     }
 
     public static BookDto fromDomainObject(Book book) {
+//        return new BookDto(book.getId().toString(), book.getTitle(), AuthorDto.fromDomainObject(book.getAuthor()),
+//                        GenreDto.fromDomainObject(book.getGenre()));
         return new BookDto(book.getId().toString(), book.getTitle(), book.getAuthor(), book.getGenre());
     }
 }

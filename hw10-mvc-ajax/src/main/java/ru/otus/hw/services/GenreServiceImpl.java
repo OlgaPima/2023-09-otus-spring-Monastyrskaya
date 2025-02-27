@@ -6,6 +6,7 @@ import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Errors;
 import ru.otus.hw.models.Genre;
+import ru.otus.hw.models.dto.GenreDto;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
@@ -40,5 +41,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre save(Genre genre) { return genreRepository.save(genre); }
+    public GenreDto save(GenreDto genreDto) {
+        var genre = genreDto.toDomainObject();
+        return GenreDto.fromDomainObject(genreRepository.save(genre));
+    }
 }

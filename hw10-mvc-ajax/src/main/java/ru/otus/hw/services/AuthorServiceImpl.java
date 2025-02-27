@@ -6,6 +6,7 @@ import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Errors;
+import ru.otus.hw.models.dto.AuthorDto;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 
@@ -29,8 +30,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void deleteById(Long id) {
-        // Проверка, что автор существует:
-//        authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Errors.AUTHOR_NOT_FOUND.getMessage().formatted(id)));
+        // Проверка, что автор существует (иначе - эксепшн):
         findById(id);
         // Проверка, что к нему не привязано ни одной книги:
         if (bookRepository.findByAuthorId(id).size() > 0) {
@@ -40,7 +40,9 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author save(Author author) {
-        return authorRepository.save(author);
+    public AuthorDto save(AuthorDto authorDto) {
+        //return authorRepository.save(author);
+        var author = authorDto.toDomainObject();
+        return AuthorDto.fromDomainObject(authorRepository.save(author));
     }
 }

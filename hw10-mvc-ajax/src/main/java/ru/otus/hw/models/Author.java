@@ -19,9 +19,9 @@ public class Author {
 
     @Column(name = "birth_year")
     private Integer birthYear;
-
-    public Author(String fullName, Integer birthYear) {
-        this.fullName = fullName;
-        this.birthYear = birthYear;
-    }
+//
+//    public Author(String fullName, Integer birthYear) {
+//        this.fullName = fullName;
+//        this.birthYear = birthYear;
+//    }
 }
