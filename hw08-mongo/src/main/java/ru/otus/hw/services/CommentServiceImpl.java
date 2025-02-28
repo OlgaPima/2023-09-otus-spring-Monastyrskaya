@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.BookComment;
-import ru.otus.hw.models.Errors;
+import ru.otus.hw.common.Errors;
 import ru.otus.hw.repositories.BookCommentRepository;
 import ru.otus.hw.repositories.BookRepository;
 

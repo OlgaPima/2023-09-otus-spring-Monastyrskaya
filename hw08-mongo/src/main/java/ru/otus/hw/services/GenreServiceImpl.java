@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
-import ru.otus.hw.models.Errors;
+import ru.otus.hw.common.Errors;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
@@ -41,11 +41,15 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void deleteById(String id) {
         // Проверка, что жанр существует:
-        genreRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage().formatted(id)));
+        if (!genreRepository.existsById(id)) {
+            throw new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage().formatted(id));
+        }
+
         // Проверка, что к нему не привязано ни одной книги:
-        if (bookRepository.findByGenreId(id).size() > 0) {
+        if (bookRepository.countByGenreId(id) > 0) {
             throw new HasChildEntitiesException("Удаление невозможно: к жанру привязаны книги. Сначала нужно удалить книги этого жанра");
         }
+
         genreRepository.deleteById(id);
     }
 

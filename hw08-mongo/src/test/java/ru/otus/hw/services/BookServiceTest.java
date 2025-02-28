@@ -4,7 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
@@ -26,18 +28,19 @@ import static org.mockito.BDDMockito.given;
 @DisplayName("Репозиторий на основе Mongo для работы с книгами ")
 public class BookServiceTest {
 
+    @Autowired
     private BookServiceImpl bookService;
 
-    @Mock
+    @MockBean
     private AuthorRepository authorRepository;
 
-    @Mock
+    @MockBean
     private GenreRepository genreRepository;
 
-    @Mock
+    @MockBean
     private BookRepository bookRepository;
 
-    @Mock
+    @MockBean
     private BookCommentRepository commentRepository;
 
     @BeforeEach
@@ -57,8 +60,6 @@ public class BookServiceTest {
         given(bookRepository.findAll()).willReturn(booksList);
         given(bookRepository.findById("1")).willReturn(Optional.ofNullable(booksList.get(0)));
         given(bookRepository.findById("2")).willReturn(Optional.ofNullable(booksList.get(1)));
-
-        bookService = new BookServiceImpl(authorRepository, genreRepository, bookRepository, commentRepository);
     }
 
     @DisplayName("должен загружать список всех книг")

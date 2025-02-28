@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Author;
-import ru.otus.hw.models.Errors;
+import ru.otus.hw.common.Errors;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
 
@@ -41,9 +41,12 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void deleteById(String id) {
         // Проверка, что автор существует:
-        authorRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Errors.AUTHOR_NOT_FOUND.getMessage().formatted(id)));
+        if (!authorRepository.existsById(id)) {
+            throw new EntityNotFoundException(Errors.AUTHOR_NOT_FOUND.getMessage().formatted(id));
+        }
+
         // Проверка, что к нему не привязано ни одной книги:
-        if (bookRepository.findByAuthorId(id).size() > 0) {
+        if (bookRepository.countByAuthorId(id) > 0) {
             throw new HasChildEntitiesException("Удаление невозможно: к автору привязаны книги. Сначала нужно удалить книги этого автора");
         }
         authorRepository.deleteById(id);

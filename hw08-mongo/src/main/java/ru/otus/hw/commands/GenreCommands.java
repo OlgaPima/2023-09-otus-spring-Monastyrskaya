@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.hw.converters.GenreConverter;
-import ru.otus.hw.models.Errors;
+import ru.otus.hw.common.Errors;
 import ru.otus.hw.services.GenreService;
 
 import java.util.stream.Collectors;

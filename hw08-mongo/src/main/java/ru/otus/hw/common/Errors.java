@@ -1,4 +1,4 @@
-package ru.otus.hw.models;
+package ru.otus.hw.common;
 
 import lombok.Getter;
 
