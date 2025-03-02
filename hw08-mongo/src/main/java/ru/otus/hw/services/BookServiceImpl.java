@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
             throw new EntityNotFoundException(Errors.BOOK_NOT_FOUND.getMessage().formatted(id));
         }
         // Удаляем комментарии:
-        commentRepository.findCommentIdByBookId(id).forEach(comment -> commentRepository.deleteById(comment.getId()));
+        commentRepository.deleteAllById(commentRepository.findCommentIdByBookId(id));
         // удаляем саму книгу:
         bookRepository.deleteById(id);
     }

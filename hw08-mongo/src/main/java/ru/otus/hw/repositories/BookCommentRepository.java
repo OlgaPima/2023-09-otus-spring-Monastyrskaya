@@ -13,7 +13,9 @@ public interface BookCommentRepository extends MongoRepository<BookComment, Stri
 
     // настраиваем проекцию, чтобы возвращать только id-шники комментариев, без текста и книги
     @Query(value = "{ 'book.id' : ?0 }", fields = "{ '_id' : 1, 'commentText' : 0, 'book' : 0 }")
-    List<BookComment> findCommentIdByBookId(String bookId); //Book book);
+    List<BookComment> findCommentIdByBookId(String bookId);
+
+    void deleteAllById(List<BookComment> comments);
 
     BookComment findTopByOrderByIdAsc();
 }
