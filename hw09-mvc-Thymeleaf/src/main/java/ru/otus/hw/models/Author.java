@@ -3,6 +3,7 @@ package ru.otus.hw.models;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import ru.otus.hw.models.dto.AuthorDto;
 
 @Data
 @Document
@@ -16,10 +17,12 @@ public class Author {
 
     private Integer birthYear;
 
-//    private List<Book> books; // TODO: зачем это было?
-
     public Author(String fullName, Integer birthYear) {
         this.fullName = fullName;
         this.birthYear = birthYear;
+    }
+
+    public AuthorDto toDtoObject() {
+        return new AuthorDto(id == null || id.isBlank() ? null : id, fullName, birthYear);
     }
 }

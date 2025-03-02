@@ -1,6 +1,5 @@
 package ru.otus.hw.controller;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -10,9 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
-import ru.otus.hw.models.Errors;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.models.dto.GenreDto;
 import ru.otus.hw.services.GenreService;
@@ -23,21 +20,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GenreController {
     private final GenreService genreService;
+    private boolean redirectFromDelete;
+    private String genreIdChildEntitiesError;
 
     @GetMapping("/genres")
-    public String genresList(Model model, HttpSession session) {
+    public String genresList(Model model) {
         List<Genre> genres = genreService.findAll();
         model.addAttribute("genres", genres);
 
-        boolean redirectFromDelete = session.getAttribute("redirectFromDelete") != null && (boolean)session.getAttribute("redirectFromDelete");
         if (redirectFromDelete) {
             // При следующей загрузке страницы надо скрыть сообщение об ошибке "Есть книги данного жанра, удаление невозможно"
             // Иначе оно там залипает и остается навечно, при любом переходе между страницами.
             // Сбрасываем флаг для этого  - сообщение показывается однократно, затем исчезает
-            session.setAttribute("redirectFromDelete", false);
+            model.addAttribute("genreIdChildEntitiesError", genreIdChildEntitiesError);
+            redirectFromDelete = false;
         }
         else {
-            session.setAttribute("genreIdChildEntitiesError", null);
+            model.addAttribute("genreIdChildEntitiesError", null);
         }
 
         return "genresList";
@@ -67,14 +66,14 @@ public class GenreController {
     }
 
     @GetMapping("/genres/delete")
-    public String deleteGenre(@RequestParam("id") String id, HttpSession session) {
+    public String deleteGenre(@RequestParam("id") String id) {
         try {  // удаление жанра - проверяем, есть ли книги, если есть - блокируем удаление и выводим ошибку:
             genreService.deleteById(id);
             return "redirect:/genres";
         }
         catch (HasChildEntitiesException e) {
-            session.setAttribute("genreIdChildEntitiesError", id);
-            session.setAttribute("redirectFromDelete", true);
+            genreIdChildEntitiesError = id;
+            redirectFromDelete = true;
             return "redirect:/genres";
         }
     }

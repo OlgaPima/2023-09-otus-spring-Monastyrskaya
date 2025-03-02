@@ -45,7 +45,7 @@
                             <img src="../static/icons/delete.png" alt=""/>
                         </a>
                     </button>
-                    <div th:if="${session.authorIdChildEntitiesError == author.id}" role="alert"
+                    <div th:if="${authorIdChildEntitiesError == author.id}" role="alert"
                          class="alert alert-danger alert-dismissible fade show error-dialog">
                         Есть книги данного автора, удаление невозможно
                         <button type="button" class="btn-close btn-close-padding" data-bs-dismiss="alert" aria-label="Close"></button>

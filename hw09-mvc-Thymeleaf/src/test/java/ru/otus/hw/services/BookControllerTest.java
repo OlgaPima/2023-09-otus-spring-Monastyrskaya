@@ -14,7 +14,6 @@ import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Genre;
 
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.hw.models.dto.AuthorDto;
 import ru.otus.hw.models.dto.BookDto;
 
 import static org.hamcrest.core.StringContains.containsString;
@@ -26,10 +25,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-//@DataMongoTest
-//@WebMvcTest(AuthorController.class)
-// - приложение на MongoDB, и эти 2 аннотации несовместимы друг с другом. Поэтому для тестирования эндпоинтов на встроенной монге используем 3 аннотации ниже:
 @AutoConfigureMockMvc
 @AutoConfigureDataMongo
 @SpringBootTest
@@ -42,21 +37,15 @@ public class BookControllerTest {
     @MockBean
     private BookService bookService;
 
-    @MockBean
-    private AuthorService authorService;
-
-    @MockBean
-    private GenreService genreService;
+    private final List<Book> books = List.of(
+            new Book("1", "Book1", new Author("1", "Author1", 1967), new Genre("1", "genre1")),
+            new Book("2", "Book2", new Author("2", "Author2", 1994), new Genre("2", "genre2"))
+    );
 
     @Test
     @DisplayName("отображение списка всех книг")
     public void shouldReturnCorrectBooksList() throws Exception {
-        List<Book> books = List.of(
-                new Book("1", "Book1", new Author("1", "Author1", 1967), new Genre("1", "genre1")),
-                new Book("2", "Book2", new Author("2", "Author2", 1994), new Genre("2", "genre2"))
-        );
         given(bookService.findAll()).willReturn(books);
-
         mvc.perform(get("/books").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(view().name("booksList"))
@@ -79,31 +68,22 @@ public class BookControllerTest {
     @Test
     @DisplayName("создание новой книги и редирект на список книг")
     public void shouldCreateBookAndRedirectToBooksList() throws Exception {
-        var bookDto = new BookDto("1", "Book1",
-                new Author("1", "AuthorName1", 1876),
-                new Genre("1", "Genre1")
-        );
         mvc.perform(post("/books/edit")
-                        .flashAttr("book", bookDto))
+                        .flashAttr("book", books.get(0).toDtoObject()))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/books"));
 
-        verify(bookService, times(1)).save(bookDto.toDomainObject());
+        verify(bookService, times(1)).save(books.get(0));
     }
 
     @Test
     @DisplayName("редактирование книги и редирект на список книг")
     public void shouldEditBookAndRedirectToBooksList() throws Exception {
-        var newBook = new BookDto("1", "Book1",
-                new Author("1", "AuthorName1", 1876),
-                new Genre("1", "Genre1")
-        );
-
-        this.mvc.perform(post("/books/edit?id=1")
-                        .flashAttr("book", newBook))
+        mvc.perform(post("/books/edit?id=1")
+                        .flashAttr("book", books.get(0).toDtoObject()))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/books"));
 
-        verify(bookService, times(1)).save(newBook.toDomainObject());
+        verify(bookService, times(1)).save(books.get(0));
     }
 }

@@ -43,7 +43,7 @@
                             <img src="../static/icons/delete.png" alt=""/>
                         </a>
                     </button>
-                    <div th:if="${session.genreIdChildEntitiesError == genre.id}" role="alert"
+                    <div th:if="${genreIdChildEntitiesError == genre.id}" role="alert"
                          class="alert alert-danger alert-dismissible fade show error-dialog">
                         Есть книги данного жанра, удаление невозможно
                         <button type="button" class="btn-close btn-close-padding" data-bs-dismiss="alert" aria-label="Close"></button>
