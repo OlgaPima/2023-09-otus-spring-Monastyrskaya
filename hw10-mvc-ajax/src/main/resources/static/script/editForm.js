@@ -1,10 +1,17 @@
 // Добавление/редактирование строки. Универсальная функция для всех страниц редактирования сущностей (авторы, жанры, книги).
 // Только с комментариями не прокатило, там отдельный код
 function save(editForm, id) {
-    const formArray = $(editForm).serializeArray();
+    const formValuesArray = $(editForm).serializeArray();
     let postedObject = {};
-    $.map(formArray, function(i){
-        postedObject[i['name']] = i['value'];
+    $.map(formValuesArray, function(formValueObject){
+        const controlName = formValueObject['name'];
+        const controlValue = formValueObject['value'];
+        if (document.getElementsByName(controlName)[0].tagName === 'SELECT') {
+            postedObject[controlName] = {"id": controlValue};
+        }
+        else {
+            postedObject[controlName] = controlValue;
+        }
     });
 
     if (id) {

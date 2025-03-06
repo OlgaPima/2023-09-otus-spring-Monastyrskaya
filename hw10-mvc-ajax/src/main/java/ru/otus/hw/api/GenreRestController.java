@@ -33,7 +33,7 @@ public class GenreRestController {
         }
 
         try {
-            var savedGenreDto = GenreDto.fromDomainObject(genreService.save(genreDto.toDomainObject()));
+            var savedGenreDto = genreService.save(genreDto);
             return new EntitySaveResult<>("success", savedGenreDto, null);
         }
         catch (Exception e) {

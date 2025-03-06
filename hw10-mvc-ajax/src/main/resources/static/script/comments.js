@@ -22,8 +22,9 @@ function saveComment(editForm, commentId) {
     $.ajax({
         url: '/api/v1/books/comments?bookId=' + bookId, // переменная bookId определяется в файле bookComments.html
         method: 'post',
+        contentType: 'application/json;charset=utf-8',
         dataType: 'json',
-        data: jsonData,
+        data: JSON.stringify(jsonData),
         // Этот блок сработает при каких-то сетевых ошибках, если вызов не дошел до контроллера
         error: function(responseData) {
             alert("Ошибка сохранения"); // TODO: отображать текст ошибки

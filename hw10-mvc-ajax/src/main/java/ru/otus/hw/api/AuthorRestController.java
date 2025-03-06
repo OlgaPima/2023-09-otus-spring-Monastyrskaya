@@ -35,8 +35,7 @@ public class AuthorRestController {
             return new EntitySaveResult<>(bindingResult); // выкидываем ошибки валидации на клиента
         }
 
-        try { // TODO: переделать, чтобы authorService.save принимал и возвращал dto, а не доменный объект. Тогда в тестах можно будет прописать конкретный аргумент, а не any
-            //var savedAuthorDto = AuthorDto.fromDomainObject(authorService.save(authorDto.toDomainObject()));
+        try {
             var savedAuthorDto = authorService.save(authorDto);
             return new EntitySaveResult<>("success", savedAuthorDto, null);
         }
