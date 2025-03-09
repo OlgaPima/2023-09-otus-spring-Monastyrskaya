@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
+
     private final BookRepository bookRepository;
 
     @Override
@@ -24,7 +25,8 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre findById(String id) {
-        return genreRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage().formatted(id)));
+        return genreRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage().formatted(id)));
     }
 
     @Override
@@ -33,11 +35,14 @@ public class GenreServiceImpl implements GenreService {
         findById(id);
         // Проверка, что к нему не привязано ни одной книги:
         if (bookRepository.findByGenreId(id).size() > 0) {
-            throw new HasChildEntitiesException("Удаление невозможно: к жанру привязаны книги. Сначала нужно удалить книги этого жанра");
+            throw new HasChildEntitiesException("Удаление невозможно: к жанру привязаны книги. " +
+                    "Сначала нужно удалить книги этого жанра");
         }
         genreRepository.deleteById(id);
     }
 
     @Override
-    public Genre save(Genre genre) { return genreRepository.save(genre); }
+    public Genre save(Genre genre) {
+        return genreRepository.save(genre);
+    }
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface BookCommentRepository extends MongoRepository<BookComment, String> {
     BookComment save(BookComment comment);
+
     List<BookComment> findByBookId(String bookId);
+
     BookComment findTopByOrderByIdAsc();
 }

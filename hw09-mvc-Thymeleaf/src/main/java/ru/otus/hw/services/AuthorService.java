@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface AuthorService {
     List<Author> findAll();
+
     Author findById(String id);
+
     Author save(Author author);
+
     void deleteById(String id);
 }

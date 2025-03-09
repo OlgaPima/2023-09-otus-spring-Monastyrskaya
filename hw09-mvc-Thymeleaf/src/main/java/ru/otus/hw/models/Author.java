@@ -1,6 +1,8 @@
 package ru.otus.hw.models;
 
-import lombok.*;
+import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ru.otus.hw.models.dto.AuthorDto;

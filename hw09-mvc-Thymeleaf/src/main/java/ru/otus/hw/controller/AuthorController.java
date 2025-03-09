@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import ru.otus.hw.exceptions.HasChildEntitiesException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.dto.AuthorDto;
 import ru.otus.hw.services.AuthorService;
@@ -18,24 +20,17 @@ import java.util.List;
 public class AuthorController {
 
     private final AuthorService authorService;
-    private boolean redirectFromDelete;
-    private String authorIdChildEntitiesError;
 
     @GetMapping("/authors")
-    public String authorsList(Model model) {
+    public String authorsList(@RequestParam(name = "cannotDelId", required = false)
+                                          String cannotDelAuthorId, Model model) {
         List<Author> authors = authorService.findAll();
         model.addAttribute("authors", authors);
 
-        if (redirectFromDelete) {
-            // При следующей загрузке страницы надо скрыть возможное сообщение об ошибке "Есть книги данного автора, удаление невозможно"
-            // (которое могло возникнуть там ранее при попытке кого-то удалить) - иначе оно там залипает и остается навечно,
-            // при любом переходе между страницами. Сбрасываем флаг для этого - сообщение показывается однократно, затем исчезает
-            model.addAttribute("authorIdChildEntitiesError", authorIdChildEntitiesError);
-            redirectFromDelete = false;
-        }
-        else {
-            model.addAttribute("authorIdChildEntitiesError", null);
-        }
+        // Этот параметр нужен для отображения в гриде сообщения об ошибке
+        // "Есть книги данного автора, удаление невозможно"
+        model.addAttribute("cannotDelId", cannotDelAuthorId);
+
         return "authorsList";
     }
 
@@ -44,8 +39,7 @@ public class AuthorController {
         Author author;
         if (id == null || id.isBlank()) {
             author = new Author();
-        }
-        else {
+        } else {
             author = authorService.findById(id);
         }
         model.addAttribute("author", author);
@@ -59,19 +53,5 @@ public class AuthorController {
         }
         authorService.save(authorDto.toDomainObject());
         return "redirect:/authors";
-    }
-
-    @GetMapping("/authors/delete")
-    public String deleteAuthor(@RequestParam("id") String id) {
-        // удаление автора - проверяем, есть ли книги, если есть - блокируем удаление и выводим ошибку:
-        try {
-            authorService.deleteById(id);
-            return "redirect:/authors";
-        }
-        catch (HasChildEntitiesException e) {
-            authorIdChildEntitiesError = id;
-            redirectFromDelete = true;
-            return "redirect:/authors";
-        }
     }
 }

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="@localhost">
+  <database-model serializer="dbm" dbms="MONGO" family-id="MONGO" format-version="4.32">
+    <root id="1">
+      <ServerVersion>7.0.4</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="admin"/>
+    <schema id="3" parent="1" name="awesomeMongo"/>
+    <schema id="4" parent="1" name="config"/>
+    <schema id="5" parent="1" name="local"/>
+    <schema id="6" parent="1" name="test">
+      <Current>1</Current>
+    </schema>
+    <table id="7" parent="6" name="author"/>
+    <table id="8" parent="6" name="book"/>
+    <table id="9" parent="6" name="bookComment"/>
+    <table id="10" parent="6" name="genre"/>
+    <table id="11" parent="6" name="mongockChangeLog"/>
+    <column id="12" parent="7" name="_id">
+      <DataType>ObjectId|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="13" parent="7" name="fullName">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="14" parent="7" name="_class">
+      <DataType>String|12s</DataType>
+      <Position>2</Position>
+    </column>
+    <column id="15" parent="8" name="_id">
+      <DataType>ObjectId|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="16" parent="8" name="_class">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="17" parent="8" name="author">
+      <DataType>DBRef|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="18" parent="8" name="genre">
+      <DataType>DBRef|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="19" parent="8" name="title">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="20" parent="9" name="_id">
+      <DataType>ObjectId|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="21" parent="9" name="_class">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="22" parent="9" name="book">
+      <DataType>DBRef|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="23" parent="9" name="commentText">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="24" parent="10" name="_id">
+      <DataType>ObjectId|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="25" parent="10" name="_class">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="26" parent="10" name="name">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="27" parent="11" name="_id">
+      <DataType>ObjectId|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="28" parent="11" name="_class">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="29" parent="11" name="author">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="30" parent="11" name="changeId">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="31" parent="11" name="executionHostname">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="32" parent="11" name="state">
+      <DataType>String|12s</DataType>
+      <Position>1</Position>
+    </column>
+    <column id="33" parent="11" name="changeLogClass">
+      <DataType>String|12s</DataType>
+      <Position>2</Position>
+    </column>
+    <column id="34" parent="11" name="executionId">
+      <DataType>String|12s</DataType>
+      <Position>2</Position>
+    </column>
+    <column id="35" parent="11" name="timestamp">
+      <DataType>ISODate|91s</DataType>
+      <Position>2</Position>
+    </column>
+    <column id="36" parent="11" name="changeSetMethod">
+      <DataType>String|12s</DataType>
+      <Position>3</Position>
+    </column>
+    <column id="37" parent="11" name="executionMillis">
+      <DataType>Int64|12s</DataType>
+      <Position>3</Position>
+    </column>
+  </database-model>
+</dataSource>

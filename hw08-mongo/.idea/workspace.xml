@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="afb32dc6-c465-450c-8389-18b8e9a0d067" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2YlfYX8z86IpofruyJUsaZZR6hB" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="h2&#10;mongo" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../hw10-mvc-ajax" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Мои документы\_Учеба\_Otus\2023-09-otus-spring-Monastyrskaya\hw06-hibernate\src\test\resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.Application">
+    <configuration name="AuthorServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="hw08-mongo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.otus.hw.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.otus.hw.services" />
+      <option name="MAIN_CLASS_NAME" value="ru.otus.hw.services.AuthorServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AuthorServiceTest.shouldNotDeleteAuthorHavingBooks" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="hw08-mongo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.otus.hw.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.otus.hw.services" />
+      <option name="MAIN_CLASS_NAME" value="ru.otus.hw.services.AuthorServiceTest" />
+      <option name="METHOD_NAME" value="shouldNotDeleteAuthorHavingBooks" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BookServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="hw08-mongo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.otus.hw.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.otus.hw.services" />
+      <option name="MAIN_CLASS_NAME" value="ru.otus.hw.services.BookServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GenreServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="hw08-mongo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.otus.hw.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.otus.hw.services" />
+      <option name="MAIN_CLASS_NAME" value="ru.otus.hw.services.GenreServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GenreServiceTest.shouldDeleteGenreWithoutBooks" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="hw08-mongo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ru.otus.hw.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ru.otus.hw.services" />
+      <option name="MAIN_CLASS_NAME" value="ru.otus.hw.services.GenreServiceTest" />
+      <option name="METHOD_NAME" value="shouldDeleteGenreWithoutBooks" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="hw07-jpa" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.otus.hw.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="hw08-mongo" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="ru.otus.hw.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="JUnit.AuthorServiceTest.shouldNotDeleteAuthorHavingBooks" />
+      <item itemvalue="JUnit.GenreServiceTest" />
+      <item itemvalue="JUnit.GenreServiceTest.shouldDeleteGenreWithoutBooks" />
+      <item itemvalue="JUnit.AuthorServiceTest" />
+      <item itemvalue="JUnit.BookServiceTest" />
+      <item itemvalue="Spring Boot.Application (1)" />
+      <item itemvalue="Spring Boot.Application" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.BookServiceTest" />
+        <item itemvalue="JUnit.AuthorServiceTest" />
+        <item itemvalue="JUnit.GenreServiceTest" />
+        <item itemvalue="JUnit.GenreServiceTest.shouldDeleteGenreWithoutBooks" />
+        <item itemvalue="JUnit.AuthorServiceTest.shouldNotDeleteAuthorHavingBooks" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="afb32dc6-c465-450c-8389-18b8e9a0d067" name="Changes" comment="" />
+      <created>1701105136508</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1701105136508</updated>
+      <workItem from="1701105137597" duration="1980000" />
+      <workItem from="1701525211756" duration="4066000" />
+      <workItem from="1701604685438" duration="24931000" />
+      <workItem from="1701714627225" duration="7447000" />
+      <workItem from="1702231153916" duration="6332000" />
+      <workItem from="1702726758530" duration="36423000" />
+      <workItem from="1703700880677" duration="20228000" />
+      <workItem from="1704571912212" duration="1579000" />
+      <workItem from="1704574094941" duration="194000" />
+      <workItem from="1704636241138" duration="38006000" />
+      <workItem from="1704982090980" duration="2923000" />
+      <workItem from="1704991961850" duration="122000" />
+      <workItem from="1704992442485" duration="715000" />
+      <workItem from="1704993998661" duration="280000" />
+      <workItem from="1704994379857" duration="605000" />
+      <workItem from="1705946460300" duration="2292000" />
+      <workItem from="1706088009441" duration="6927000" />
+      <workItem from="1706293527165" duration="2789000" />
+      <workItem from="1706980406692" duration="3092000" />
+      <workItem from="1709297643209" duration="763000" />
+      <workItem from="1709659486263" duration="143000" />
+      <workItem from="1739993621059" duration="1024000" />
+      <workItem from="1740156982872" duration="2353000" />
+      <workItem from="1740238815295" duration="7277000" />
+      <workItem from="1740248631182" duration="3354000" />
+      <workItem from="1740649526275" duration="9787000" />
+      <workItem from="1740950266641" duration="4858000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

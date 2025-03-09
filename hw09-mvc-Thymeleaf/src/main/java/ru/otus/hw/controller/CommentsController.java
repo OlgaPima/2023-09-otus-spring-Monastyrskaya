@@ -5,7 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.BookComment;
 import ru.otus.hw.models.dto.BookCommentDto;
@@ -19,6 +22,7 @@ import java.util.List;
 public class CommentsController {
 
     private final CommentService commentService;
+
     private final BookService bookService;
 
     @GetMapping("/books/comments")
@@ -30,7 +34,8 @@ public class CommentsController {
     }
 
     @PostMapping("/books/comments")
-    public String saveComment(@RequestParam("bookId") String bookId, @Valid @ModelAttribute("commentDto") BookCommentDto commentDto,
+    public String saveComment(@RequestParam("bookId") String bookId,
+                              @Valid @ModelAttribute("commentDto") BookCommentDto commentDto,
                               BindingResult bindingResult, Model model) {
         if (!bindingResult.hasErrors()) {
             commentService.insert(commentDto.getCommentText(), bookId);
@@ -56,11 +61,5 @@ public class CommentsController {
         model.addAttribute("comments", comments);
         model.addAttribute("book", book);
         return "bookComments";
-    }
-
-    @GetMapping("/books/comments/delete")
-    public String deleteComment(@RequestParam("commentId") String commentId, @RequestParam("bookId") String bookId) {
-        commentService.delete(commentId);
-        return "redirect:/books/comments?bookId=" + bookId;
     }
 }

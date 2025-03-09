@@ -24,6 +24,7 @@
         <guava.version>32.0.0-jre</guava.version>
         <checkstyle-plugin.version>3.2.2</checkstyle-plugin.version>
         <checkstyle.version>10.11.0</checkstyle.version>
+<!--        <checkstyle.version>10.3</checkstyle.version>-->
         <checkstyle.config.url>
             https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
         </checkstyle.config.url>
