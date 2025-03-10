@@ -13,13 +13,17 @@ import ru.otus.hw.models.Author;
 import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.dto.AuthorDto;
-import ru.otus.hw.services.AuthorServiceImpl;
+import ru.otus.hw.services.AuthorService;
 
-import static org.mockito.Mockito.*;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(AuthorRestController.class)
@@ -29,7 +33,7 @@ public class AuthorControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private AuthorServiceImpl authorService;
+    private AuthorService authorService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -67,7 +71,7 @@ public class AuthorControllerTest {
         var expectedAuthorDto = new AuthorDto("1", "Author1", 1993);
 
         when(authorService.save(createdAuthorDto)).thenReturn(expectedAuthorDto);
-        var saveResult = new EntitySaveResult<>("success", expectedAuthorDto, null);
+        var saveResult = new EntitySaveResult<>(SaveResults.SUCCESS.getName(), expectedAuthorDto, null);
         String expectedApiResult = objectMapper.writeValueAsString(saveResult);
 
         mvc.perform(post("/api/v1/authors")
@@ -77,20 +81,18 @@ public class AuthorControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedApiResult));
 
-        verify(authorService, times(1)).save(createdAuthorDto); //save(createdAuthor);
+        verify(authorService, times(1)).save(createdAuthorDto);
     }
 
     @Test
     @DisplayName("редактирование существующего автора")
     public void shouldEditAuthor() throws Exception {
-//        String id = "1";
-//        var author = new AuthorDto(id, "Author1", 1993);
-//        when(authorService.findById(Long.valueOf(id))).thenReturn(author.toDomainObject());
-//
-//        this.mvc.perform(get("/authors/edit?id=" + id))
-//                .andExpect(status().isOk())
-//                .andExpect(MockMvcResultMatchers.view().name("authorEdit"))
-//                .andExpect(MockMvcResultMatchers.model().attributeExists("author"))
-//                .andExpect(content().string(containsString("Author1")));
+        String id = "1";
+        var author = new AuthorDto(id, "Author1", 1993);
+        when(authorService.findById(Long.valueOf(id))).thenReturn(author.toDomainObject());
+
+        this.mvc.perform(get("/api/v1/authors/" + id))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Author1")));
     }
 }

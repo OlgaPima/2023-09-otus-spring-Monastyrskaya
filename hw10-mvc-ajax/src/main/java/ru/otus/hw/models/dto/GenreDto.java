@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Genre;
 
 @Data
@@ -20,7 +19,8 @@ public class GenreDto {
     private String name;
 
     public Genre toDomainObject() {
-        // при создании записи из браузера прилетает пустая строка в виде айдишника - меняем ее на Null для корректного сохранения в БД
+        // при создании записи из браузера прилетает пустая строка в виде айдишника -
+        // меняем ее на Null для корректного сохранения в БД
         return new Genre(id == null || id.isBlank() ? null : Long.parseLong(id), name);
     }
 

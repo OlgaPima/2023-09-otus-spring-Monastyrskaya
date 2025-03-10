@@ -10,8 +10,8 @@ function deleteWithConfirm(sender) {
         $.ajax({
             type: 'DELETE',
             url: deleteUrl,
-            success: (response) => {
-                if (response.success) {
+            success: (deleteIsOk) => {
+                if (deleteIsOk === true || deleteIsOk === "") {
                     const deletedTr = document.getElementById("tr-" + rowId);
                     deletedTr.parentNode.removeChild(deletedTr);
                 }

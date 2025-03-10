@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface BookCommentRepository extends JpaRepository<BookComment, Long> {
     BookComment save(BookComment comment);
+
     List<BookComment> findByBookId(Long bookId);
+
     BookComment findTopByOrderByIdAsc();
 }

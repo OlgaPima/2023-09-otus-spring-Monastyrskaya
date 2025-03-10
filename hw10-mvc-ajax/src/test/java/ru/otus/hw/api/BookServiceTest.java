@@ -3,7 +3,7 @@
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+//import org.springframework.boot.test.context.SpringBootTest;
 //import org.springframework.context.annotation.ComponentScan;
 //import ru.otus.hw.models.Book;
 //import ru.otus.hw.repositories.AuthorRepository;
@@ -13,7 +13,8 @@
 //
 //import static org.assertj.core.api.Assertions.assertThat;
 //
-//@DataMongoTest
+////@DataMongoTest
+//@SpringBootTest
 //@ComponentScan({"ru.otus.hw.services"})
 //@DisplayName("Репозиторий на основе Mongo для работы с книгами ")
 //public class BookServiceTest {

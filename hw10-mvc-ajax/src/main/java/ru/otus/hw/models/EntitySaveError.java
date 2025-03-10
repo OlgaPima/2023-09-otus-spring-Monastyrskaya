@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EntitySaveError {
     private String fieldName;
+
     private String errorMessage;
 }

@@ -13,7 +13,9 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class EntitySaveResult<T> {
     private String status;
+
     private T entityDto;
+
     private List<EntitySaveError> errors;
 
     public EntitySaveResult(BindingResult result) {
