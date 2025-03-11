@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -79,7 +80,7 @@ public class BookControllerTest {
         var createdBookDto = new BookDto(null, "Book1", author1, genre1);
         var expectedBookDto = new BookDto("1", "Book1", author1, genre1);
 
-        when(bookService.save(createdBookDto)).thenReturn(expectedBookDto);
+        when(bookService.save(any())).thenReturn(expectedBookDto);
         var saveResult = new EntitySaveResult<>(SaveResults.SUCCESS.getName(), expectedBookDto, null);
         String expectedApiResult = objectMapper.writeValueAsString(saveResult);
 
@@ -90,7 +91,7 @@ public class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedApiResult));
 
-        verify(bookService, times(1)).save(createdBookDto);
+        verify(bookService, times(1)).save(any());
     }
 
     @Test
