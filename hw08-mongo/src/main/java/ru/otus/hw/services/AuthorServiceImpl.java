@@ -16,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
+
     private final BookRepository bookRepository;
 
     @Override
@@ -47,7 +48,8 @@ public class AuthorServiceImpl implements AuthorService {
 
         // Проверка, что к нему не привязано ни одной книги:
         if (bookRepository.countByAuthorId(id) > 0) {
-            throw new HasChildEntitiesException("Удаление невозможно: к автору привязаны книги. Сначала нужно удалить книги этого автора");
+            throw new HasChildEntitiesException("Удаление невозможно: к автору привязаны книги." +
+                    " Сначала нужно удалить книги этого автора");
         }
         authorRepository.deleteById(id);
     }
@@ -60,8 +62,7 @@ public class AuthorServiceImpl implements AuthorService {
         Author author;
         if (id == null || id.isBlank()) {
             author = new Author(fullName);
-        }
-        else {
+        } else {
             author = authorRepository.findById(id).orElseThrow(() ->
                     new EntityNotFoundException(Errors.AUTHOR_NOT_FOUND.getMessage().formatted(id)));
             author.setFullName(fullName);

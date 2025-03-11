@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class CommentCommand extends SaveToDbCommands {
-
+public class CommentCommand extends AbstractSaveCommands {
     private final CommentService commentService;
+
     private final BookCommentConverter commentConverter;
 
     @ShellMethod(value = "Find all comments for book by bookId", key = "fbc")
@@ -24,7 +24,7 @@ public class CommentCommand extends SaveToDbCommands {
 
     @ShellMethod(value = "Insert comment for book", key = "cins")
     public String insertComment(String comment, String bookId) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                 var savedComment = commentService.insert(comment, bookId);
                 return commentConverter.bookCommentToString(savedComment);
             }
@@ -33,7 +33,7 @@ public class CommentCommand extends SaveToDbCommands {
 
     @ShellMethod(value = "Update comment for book by commentId", key = "cupd")
     public String updateComment(String commentId, String commentText) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                 var savedComment = commentService.update(commentId, commentText);
                 return commentConverter.bookCommentToString(savedComment);
             }
@@ -42,7 +42,7 @@ public class CommentCommand extends SaveToDbCommands {
 
     @ShellMethod(value = "Delete comment for book by commentId", key = "cdel")
     public String deleteComment(String commentId) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                 commentService.delete(commentId);
                 return "Комментарий с id=%s удален".formatted(commentId);
             }

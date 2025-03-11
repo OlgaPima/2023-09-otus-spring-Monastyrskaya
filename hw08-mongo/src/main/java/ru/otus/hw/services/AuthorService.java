@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface AuthorService {
     List<Author> findAll();
+
     Optional<Author> findById(String id);
+
     Author insert(String fullName);
+
     Author update(String id, String fullName);
+
     void deleteById(String id);
 }

@@ -7,8 +7,12 @@ import java.util.Optional;
 
 public interface GenreService {
     List<Genre> findAll();
+
     Optional<Genre> findById(String id);
+
     Genre insert(String name);
+
     Genre update(String id, String name);
+
     void deleteById(String id);
 }

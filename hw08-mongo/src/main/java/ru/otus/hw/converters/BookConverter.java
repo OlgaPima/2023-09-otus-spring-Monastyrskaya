@@ -7,8 +7,8 @@ import ru.otus.hw.models.Book;
 @Component
 @RequiredArgsConstructor
 public class BookConverter {
-
     private final AuthorConverter authorConverter;
+
     private final GenreConverter genreConverter;
 
     public String bookToString(Book book) {

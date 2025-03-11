@@ -7,18 +7,46 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Author;
+import ru.otus.hw.repositories.AuthorRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataMongoTest
 @ComponentScan({"ru.otus.hw.services"})
-@DisplayName("Репозиторий на основе Mongo для работы с авторами ")
+@DisplayName("Сервис на основе Mongo для работы с авторами ")
 public class AuthorServiceTest {
 
     @Autowired
     private AuthorServiceImpl authorService;
+
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Test
+    @DisplayName("должен сохранять новую книгу")
+    public void shouldSaveNewGenre() {
+        var newAuthor = authorService.insert("Author1");
+        assertThat(newAuthor.getId()).isNotNull().isNotBlank();
+        assertEquals("Author1", newAuthor.getFullName());
+    }
+
+    @Test
+    @DisplayName("должен сохранять измененного автора")
+    public void shouldSaveUpdatedGenre() {
+        var testedAuthor = authorService.findAll().get(0);
+        String newName = "Updated fullname";
+
+        authorService.update(testedAuthor.getId(), newName);
+        var updatedAuthor = authorRepository.findById(testedAuthor.getId());
+
+        assertThat(updatedAuthor).isPresent();
+        assertThat(updatedAuthor.get().getFullName()).isEqualTo(newName);
+    }
 
     @DisplayName("должен блокировать удаление автора, если у него есть книги")
     @Test

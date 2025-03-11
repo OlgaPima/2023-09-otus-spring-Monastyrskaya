@@ -1,27 +1,17 @@
 package ru.otus.hw.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
-import ru.otus.hw.models.Author;
 import ru.otus.hw.models.Book;
-import ru.otus.hw.models.Genre;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookCommentRepository;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
 
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.mockito.BDDMockito.given;
 
 @DataMongoTest
 @ComponentScan({"ru.otus.hw.services"})
@@ -31,50 +21,36 @@ public class BookServiceTest {
     @Autowired
     private BookServiceImpl bookService;
 
-    @MockBean
+    @Autowired
     private AuthorRepository authorRepository;
 
-    @MockBean
+    @Autowired
     private GenreRepository genreRepository;
 
-    @MockBean
+    @Autowired
     private BookRepository bookRepository;
 
-    @MockBean
+    @Autowired
     private BookCommentRepository commentRepository;
 
-    @BeforeEach
-    public void tearUp() {
-        var authorsList = List.of(new Author("1", "С. Кинг"), new Author("2", "Ф. Купер"));
-        given(authorRepository.findAll()).willReturn(authorsList);
-        given(authorRepository.findById("1")).willReturn(Optional.ofNullable(authorsList.get(0)));
-        given(authorRepository.findById("2")).willReturn(Optional.ofNullable(authorsList.get(1)));
-
-        var genresList = List.of(new Genre("1", "Фантастика"), new Genre("2", "Приключения"));
-        given(genreRepository.findAll()).willReturn(genresList);
-        given(genreRepository.findById("1")).willReturn(Optional.ofNullable(genresList.get(0)));
-        given(genreRepository.findById("2")).willReturn(Optional.ofNullable(genresList.get(1)));
-
-        var booksList = List.of(new Book("1", "Лангольеры", authorsList.get(0), genresList.get(0)),
-                new Book("2", "Зверобой", authorsList.get(1), genresList.get(1)));
-        given(bookRepository.findAll()).willReturn(booksList);
-        given(bookRepository.findById("1")).willReturn(Optional.ofNullable(booksList.get(0)));
-        given(bookRepository.findById("2")).willReturn(Optional.ofNullable(booksList.get(1)));
-    }
-
-    @DisplayName("должен загружать список всех книг")
     @Test
-    public void shouldReturnCorrectBooksList() {
+    @DisplayName("должен сохранять новую книгу с автором и жанром")
+    public void shouldSaveNewBook() {
+        var author = authorRepository.findAll().get(0);
+        var genre = genreRepository.findAll().get(0);
+        String testBookName = "TestBook";
 
-        var books = bookService.findAll();
-        assertThat(books).isNotNull().hasSize(2)
-                .allMatch(a -> !a.getTitle().isEmpty())
-                .allMatch(a -> a.getAuthor() != null)
-                .allMatch(a -> a.getGenre()!= null);
+        Book testBook = bookService.insert(testBookName, author.getId(), genre.getId());
+        assertThat(testBook.getId()).isNotNull().isNotBlank();
+
+        var actualBook = bookRepository.findById(testBook.getId());
+        assertThat(actualBook).isPresent().get().matches(b -> b.getTitle().equals(testBookName))
+                .matches(b -> b.getAuthor() != null && b.getAuthor().getFullName().equals(author.getFullName()))
+                .matches(b -> b.getGenre() != null && b.getGenre().getName().equals(genre.getName()));
     }
 
+    @Test
     @DisplayName("должен сохранять измененную книгу с автором и жанром")
-    @Test
     public void shouldSaveUpdatedBook() {
         var testedBook = bookService.findAll().get(0);
         String newTitle = "Updated title";
@@ -92,5 +68,16 @@ public class BookServiceTest {
         assertThat(updatedBook.get().getTitle()).isEqualTo(newTitle);
         assertThat(updatedBook.get().getAuthor()).isEqualTo(newAuthor);
         assertThat(updatedBook.get().getGenre()).isEqualTo(newGenre);
+    }
+
+    @DisplayName("должен удалять книгу по id вместе с комментариями")
+    @Test
+    public void shouldDeleteBookWithCommentsWhenBookDeleted() {
+        String bookId = commentRepository.findTopByOrderByIdAsc().getBook().getId();
+        assertThat(bookRepository.findById(bookId)).isNotNull();
+
+        bookService.deleteById(bookId);
+        assertThat(bookRepository.findById(bookId)).isNotPresent();
+        assertThat(commentRepository.findByBookId(bookId).size()).isEqualTo(0);
     }
 }

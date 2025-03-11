@@ -3,7 +3,7 @@ package ru.otus.hw.commands;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.common.Errors;
 
-public abstract class SaveToDbCommands {
+public abstract class AbstractSaveCommands {
     // типа логируем красиво и универсально
     protected String saveChangesAndLog(SaveAction action) {
         try {

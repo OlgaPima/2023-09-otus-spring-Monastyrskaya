@@ -11,9 +11,10 @@ import java.util.stream.Collectors;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class AuthorCommands extends SaveToDbCommands {
+public class AuthorCommands extends AbstractSaveCommands {
 
     private final AuthorService authorService;
+
     private final AuthorConverter authorConverter;
 
     @ShellMethod(value = "Find all authors", key = "aa")
@@ -32,7 +33,7 @@ public class AuthorCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Insert author", key = "ains")
     public String insertAuthor(String fullName) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                     var savedBook = authorService.insert(fullName);
                     return authorConverter.authorToString(savedBook);
                 }
@@ -41,7 +42,7 @@ public class AuthorCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Update author", key = "aupd")
     public String updateAuthor(String id, String fullName) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                     var savedAuthor = authorService.update(id, fullName);
                     return authorConverter.authorToString(savedAuthor);
                 }
@@ -50,7 +51,7 @@ public class AuthorCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Delete book by id", key = "adel")
     public String deleteAuthor(String id) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                     authorService.deleteById(id);
                     return "Автор с id=%s удален".formatted(id);
                 }

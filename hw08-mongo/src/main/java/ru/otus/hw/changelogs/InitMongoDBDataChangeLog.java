@@ -14,21 +14,28 @@ import ru.otus.hw.repositories.GenreRepository;
 
 @ChangeLog(order = "001")
 public class InitMongoDBDataChangeLog {
-
     private Author sKing;
+
     private Author fKuper;
+
     private Author lTolstoy;
 
+
     private Genre fantastic;
+
     private Genre adventures;
+
     private Genre classic;
 
+
     private Book book1;
+
     private Book book3;
+
     private Book book2;
 
     @ChangeSet(order = "000", id = "dropDB", author = "olgapima", runAlways = true)
-    public void dropDB(MongoDatabase database){
+    public void dropDB(MongoDatabase database) {
         database.drop();
     }
 

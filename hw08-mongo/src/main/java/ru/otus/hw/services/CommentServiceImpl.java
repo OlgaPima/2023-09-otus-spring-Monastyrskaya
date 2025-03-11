@@ -14,8 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CommentServiceImpl implements CommentService {
-
     private final BookCommentRepository commentRepository;
+
     private final BookRepository bookRepository;
 
     @Override
@@ -46,10 +46,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public BookComment delete(String commentId) {
+    public void delete(String commentId) {
         var bookComment = findComment(commentId);
         commentRepository.deleteById(commentId);
-        return bookComment;
     }
 
     private Book findBook(String bookId) {

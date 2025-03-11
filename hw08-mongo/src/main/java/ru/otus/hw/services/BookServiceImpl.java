@@ -17,10 +17,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-
     private final AuthorRepository authorRepository;
+
     private final GenreRepository genreRepository;
+
     private final BookRepository bookRepository;
+
     private final BookCommentRepository commentRepository;
 
     @Override
@@ -50,7 +52,7 @@ public class BookServiceImpl implements BookService {
             throw new EntityNotFoundException(Errors.BOOK_NOT_FOUND.getMessage().formatted(id));
         }
         // Удаляем комментарии:
-        commentRepository.deleteAllById(commentRepository.findCommentIdByBookId(id));
+        commentRepository.deleteAllByBookId(id);
         // удаляем саму книгу:
         bookRepository.deleteById(id);
     }
@@ -60,16 +62,15 @@ public class BookServiceImpl implements BookService {
     }
 
     private Book save(String id, String title, String authorId, String genreId) {
-        var author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new EntityNotFoundException(Errors.AUTHOR_NOT_FOUND.getMessage().formatted(authorId)));
-        var genre = genreRepository.findById(genreId)
-                .orElseThrow(() -> new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage().formatted(genreId)));
+        var author = authorRepository.findById(authorId).orElseThrow(
+                () -> new EntityNotFoundException(Errors.AUTHOR_NOT_FOUND.getMessage().formatted(authorId)));
+        var genre = genreRepository.findById(genreId).orElseThrow(
+                () -> new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage().formatted(genreId)));
 
         Book book;
         if (id == null || id.isBlank()) {
             book = new Book(title, author, genre);
-        }
-        else {
+        } else {
             book = bookRepository.findById(id).orElseThrow(() ->
                     new EntityNotFoundException(Errors.BOOK_NOT_FOUND.getMessage().formatted(id)));
             book.setTitle(title);

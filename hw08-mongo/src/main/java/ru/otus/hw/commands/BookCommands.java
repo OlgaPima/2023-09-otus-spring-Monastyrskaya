@@ -12,9 +12,10 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"SpellCheckingInspection", "unused"})
 @ShellComponent
 @RequiredArgsConstructor
-public class BookCommands extends SaveToDbCommands {
+public class BookCommands extends AbstractSaveCommands {
 
     private final BookService bookService;
+
     private final BookConverter bookConverter;
 
     @ShellMethod(value = "Find all books", key = "ab")
@@ -33,7 +34,7 @@ public class BookCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Insert book", key = "bins")
     public String insertBook(String title, String authorId, String genreId) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                 var savedBook = bookService.insert(title, authorId, genreId);
                 return bookConverter.bookToString(savedBook);
             }
@@ -42,7 +43,7 @@ public class BookCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Update book", key = "bupd")
     public String updateBook(String id, String title, String authorId, String genreId) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                 var savedBook = bookService.update(id, title, authorId, genreId);
                 return bookConverter.bookToString(savedBook);
             }
@@ -51,7 +52,7 @@ public class BookCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Delete book by id", key = "bdel")
     public String deleteBook(String id) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                 bookService.deleteById(id);
                 return "Книга с id=%s удалена".formatted(id);
             }

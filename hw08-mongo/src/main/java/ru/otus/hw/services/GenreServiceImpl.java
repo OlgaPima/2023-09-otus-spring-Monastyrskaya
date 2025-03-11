@@ -16,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
+
     private final BookRepository bookRepository;
 
     @Override
@@ -47,7 +48,8 @@ public class GenreServiceImpl implements GenreService {
 
         // Проверка, что к нему не привязано ни одной книги:
         if (bookRepository.countByGenreId(id) > 0) {
-            throw new HasChildEntitiesException("Удаление невозможно: к жанру привязаны книги. Сначала нужно удалить книги этого жанра");
+            throw new HasChildEntitiesException("Удаление невозможно: к жанру привязаны книги. " +
+                    "Сначала нужно удалить книги этого жанра");
         }
 
         genreRepository.deleteById(id);
@@ -61,8 +63,7 @@ public class GenreServiceImpl implements GenreService {
         Genre genre;
         if (id == null || id.isBlank()) {
             genre = new Genre(name);
-        }
-        else {
+        } else {
             genre = genreRepository.findById(id).orElseThrow(() ->
                     new EntityNotFoundException(Errors.GENRE_NOT_FOUND.getMessage().formatted(id)));
             genre.setName(name);

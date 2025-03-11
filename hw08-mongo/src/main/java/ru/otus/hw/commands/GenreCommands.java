@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class GenreCommands extends SaveToDbCommands {
-
+public class GenreCommands extends AbstractSaveCommands {
     private final GenreService genreService;
+
     private final GenreConverter genreConverter;
 
     @ShellMethod(value = "Find all genres", key = "ag")
@@ -32,7 +32,7 @@ public class GenreCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Insert genre", key = "gins")
     public String insertGenre(String name) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                     var savedBook = genreService.insert(name);
                     return genreConverter.genreToString(savedBook);
                 }
@@ -41,7 +41,7 @@ public class GenreCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Update genre", key = "gupd")
     public String updateGenre(String id, String name) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                     var savedGenre = genreService.update(id, name);
                     return genreConverter.genreToString(savedGenre);
                 }
@@ -50,7 +50,7 @@ public class GenreCommands extends SaveToDbCommands {
 
     @ShellMethod(value = "Delete genre by id", key = "gdel")
     public String deleteGenre(String id) {
-        return saveChangesAndLog( () -> {
+        return saveChangesAndLog(() -> {
                     genreService.deleteById(id);
                     return "Жанр с id=%s удален".formatted(id);
                 }
