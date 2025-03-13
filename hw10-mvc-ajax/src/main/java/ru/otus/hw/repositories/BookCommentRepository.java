@@ -10,5 +10,5 @@ public interface BookCommentRepository extends JpaRepository<BookComment, Long> 
 
     List<BookComment> findByBookId(Long bookId);
 
-    BookComment findTopByOrderByIdAsc();
+    void deleteAllByBookId(Long id);
 }
