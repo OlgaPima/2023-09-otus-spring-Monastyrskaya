@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     Book save(Book book);
 
-    List<Book> findByGenreId(Long genreId);
+    boolean existsByGenreId(Long genreId);
 
-    List<Book> findByAuthorId(Long authorId);
+    boolean existsByAuthorId(Long authorId);
 }
