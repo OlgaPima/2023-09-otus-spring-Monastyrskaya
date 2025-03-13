@@ -10,5 +10,5 @@ public interface BookCommentRepository extends MongoRepository<BookComment, Stri
 
     List<BookComment> findByBookId(String bookId);
 
-    BookComment findTopByOrderByIdAsc();
+    void deleteAllByBookId(String id);
 }
