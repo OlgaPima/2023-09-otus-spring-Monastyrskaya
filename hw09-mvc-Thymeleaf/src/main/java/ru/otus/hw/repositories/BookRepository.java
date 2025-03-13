@@ -8,7 +8,7 @@ import java.util.List;
 public interface BookRepository extends MongoRepository<Book, String> {
     Book save(Book book);
 
-    List<Book> findByGenreId(String genreId);
+    boolean existsByAuthorId(String authorId);
 
-    List<Book> findByAuthorId(String authorId);
+    boolean existsByGenreId(String authorId);
 }
