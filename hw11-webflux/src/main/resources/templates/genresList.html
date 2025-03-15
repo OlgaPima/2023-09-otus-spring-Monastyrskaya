@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список жанров</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/bootstrap/bootstrap.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/script/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../static/script/menu.js"></script>
+    <script type="text/javascript" src="../static/script/lists.js"></script>
+</head>
+<body>
+    <div id="menu-placeholder"></div>
+    <br/>
+    <h3>Список жанров</h3>
+    <button type="button" class="btn btn-light btn-create">
+        <a href="genreEdit.html" th:href="@{/genres/edit}">
+            <img src="../static/icons/btn-add.png" alt="" style="margin-left: 4px; margin-right: 4px;"/>
+            добавить
+        </a>
+    </button>
+
+    <table class="list" style="width: 100%;">
+        <thead>
+            <tr>
+                <th style="width:18%;">ID</th>
+                <th>Название</th>
+                <th style="width:18%; text-align: center">Действия</th>
+            </tr>
+        </thead>
+        <tbody id="genres-tbody">
+        </tbody>
+    </table>
+
+    <script>
+        $.get('/api/v1/genres').done(function (genres) {
+            genres.forEach(function (genre) {
+                $('#genres-tbody').append(`
+        <tr id="tr-${genre.id}">
+            <td>${genre.id}</td>
+            <td>${genre.name}</td>
+            <td style="text-align: center;">
+                <button type="button" class="btn btn-light btn-grid-action">
+                    <a href="/genres/edit?id=${genre.id}" title="Редактировать">
+                        <img src="../static/icons/edit.png" alt=""/></a>
+                </button>
+                <button type="button" class="btn btn-light btn-grid-action">
+                    <a data-row-id="${genre.id}" href="/api/v1/genres/${genre.id}" title="Удалить"
+                       onclick="deleteWithConfirm(this); return false;">
+                        <img src="../static/icons/delete.png" alt=""/>
+                    </a>
+                </button>
+                <div id="errorPanel-${genre.id}" role="alert" class="alert alert-danger alert-dismissible fade show error-dialog"
+                style="display: none">
+                    Есть книги данного жанра, удаление невозможно
+                    <button type="button" class="btn-close btn-close-padding" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </td>
+        </tr>
+                `)
+            });
+        })
+    </script>
+</body>
+</html>
