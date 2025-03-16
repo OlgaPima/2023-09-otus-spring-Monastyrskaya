@@ -44,8 +44,7 @@
                                 </button>
                             </td>
                             <td style="text-align: left; border: none !important; padding: 0;">
-                                <form action="authorsList.html" th:action="@{/authors/delete(id=${author.id})}"
-                                      th:method="delete" title="Удалить">
+                                <form th:action="@{/authors/delete(id=${author.id})}" th:method="post" title="Удалить">
                                     <button type="submit" class="btn btn-light btn-grid-action">
                                         <img src="../static/icons/delete.png" alt=""/>
                                     </button>

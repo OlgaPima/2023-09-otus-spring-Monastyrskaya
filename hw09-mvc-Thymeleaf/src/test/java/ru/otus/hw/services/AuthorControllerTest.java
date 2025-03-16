@@ -88,26 +88,16 @@ public class AuthorControllerTest {
         verify(authorService, times(0)).save(eq(authorDto.toDomainObject()));
     }
 
-//    @Test
-//    @DisplayName("удаление автора")
-//    public void shouldDeleteAuthorAndRedirectToAuthorsList() throws Exception {
-//        String authorId = "1";
-//        mvc.perform(delete("/authors/delete?id=" + authorId))
-//                .andExpect(status().isOk());
-//
-//        verify(authorService, times(1)).deleteById(eq(authorId));
-//    }
-
-    /*@Test
+    @Test
     @DisplayName("должен удалять автора")
     void shouldDeleteAuthor() throws Exception {
-        when(bookService.findById(book.getId())).thenReturn(Optional.ofNullable(book));
-        when(commentService.findByBookId(book.getId())).thenReturn(comments);
-        mvc.perform(delete("/deleteById")
-                        .param("id", comments.get(0).getId())
-                        .param("bookId", comments.get(0).getBook().getId()))
-                .andExpect(view().name("redirect:/comment?bookId=" + book.getId()));
+        String authorId = "1";
+        var author = new Author(authorId, "Author1", 1986);
+        when(authorService.findById(authorId)).thenReturn(author);
+        mvc.perform(post("/authors/delete")
+                        .param("id", authorId))
+                .andExpect(view().name("redirect:/authors"));
 
-        verify(commentService, times(1)).deleteById(comments.get(0).getId());
-    }*/
+        verify(authorService, times(1)).deleteById(authorId);
+    }
 }

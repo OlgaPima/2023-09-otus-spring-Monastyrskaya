@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Author;
 import ru.otus.hw.models.dto.AuthorDto;
@@ -55,7 +57,7 @@ public class AuthorController {
         return "redirect:/authors";
     }
 
-    @DeleteMapping("/authors/delete")
+    @PostMapping("/authors/delete")
     public String deleteAuthor(@RequestParam("id") String id) {
         // удаление автора - проверяем, есть ли книги, если есть - блокируем удаление и выводим на клиенте ошибку:
         authorService.deleteById(id);

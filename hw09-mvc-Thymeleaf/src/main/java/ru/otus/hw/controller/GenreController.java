@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.models.dto.GenreDto;
 import ru.otus.hw.services.GenreService;
@@ -51,5 +53,17 @@ public class GenreController {
         }
         genreService.save(genreDto.toDomainObject());
         return "redirect:/genres";
+    }
+
+    @PostMapping("/genres/delete")
+    public String deleteGenre(@RequestParam("id") String id) {
+        // удаление жанра - проверяем, есть ли книги, если есть - блокируем удаление и выводим ошибку:
+        genreService.deleteById(id);
+        return "redirect:/genres";
+    }
+
+    @ExceptionHandler(HasChildEntitiesException.class)
+    public String cannotDelGenre(HasChildEntitiesException ex) {
+        return "redirect:/genres?cannotDelId=" + ex.getDeletingId();
     }
 }

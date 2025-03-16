@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.BookComment;
@@ -61,5 +61,11 @@ public class CommentsController {
         model.addAttribute("comments", comments);
         model.addAttribute("book", book);
         return "bookComments";
+    }
+
+    @PostMapping("/books/comments/delete")
+    public String deleteComment(@RequestParam("commentId") String commentId, @RequestParam("bookId") String bookId) {
+        commentService.delete(commentId);
+        return "redirect:/books/comments?bookId=" + bookId;
     }
 }

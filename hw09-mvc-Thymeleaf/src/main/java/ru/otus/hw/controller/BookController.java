@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import ru.otus.hw.exceptions.EntityNotFoundException;
@@ -60,6 +60,12 @@ public class BookController {
             return "bookEdit";
         }
         bookService.save(bookDto.toDomainObject());
+        return "redirect:/books";
+    }
+
+    @PostMapping("/books/delete")
+    public String deleteBook(@RequestParam("id") String id) {
+        bookService.deleteById(id);
         return "redirect:/books";
     }
 }

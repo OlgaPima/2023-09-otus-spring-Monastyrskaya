@@ -35,7 +35,7 @@ public class GenreServiceImpl implements GenreService {
         findById(id);
         // Проверка, что к нему не привязано ни одной книги:
         if (bookRepository.existsByGenreId(id)) {
-            throw new HasChildEntitiesException("Удаление невозможно: к жанру привязаны книги. " +
+            throw new HasChildEntitiesException(id, "Удаление невозможно: к жанру привязаны книги. " +
                     "Сначала нужно удалить книги этого жанра");
         }
         genreRepository.deleteById(id);
