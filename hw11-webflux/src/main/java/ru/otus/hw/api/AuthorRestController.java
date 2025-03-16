@@ -11,19 +11,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.dto.AuthorDto;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookRepository;
-import ru.otus.hw.services.AuthorServiceImpl;
 
 @RestController
 @RequiredArgsConstructor
 public class AuthorRestController {
     private final AuthorRepository authorRepository;
-
-    private final AuthorServiceImpl authorService;
 
     private final BookRepository bookRepository;
 
@@ -34,7 +32,10 @@ public class AuthorRestController {
 
     @GetMapping(value = "/api/v1/authors/{id}")
     public Mono<AuthorDto> getAuthorById(@PathVariable(required = false) String id) {
-        return authorService.findById(id).map(AuthorDto::fromDomainObject);
+        return authorRepository.findById(id)
+                .switchIfEmpty(Mono.error(
+                        new EntityNotFoundException("Не найден автор с id=%s".formatted(id)))
+                ).map(AuthorDto::fromDomainObject);
     }
 
     @PostMapping(value = "/api/v1/authors", consumes = "application/json;charset=UTF-8",

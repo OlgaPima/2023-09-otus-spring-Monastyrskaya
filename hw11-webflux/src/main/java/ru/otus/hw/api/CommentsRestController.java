@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.EntitySaveError;
-import ru.otus.hw.models.BookComment;
 import ru.otus.hw.models.dto.BookCommentDto;
 import ru.otus.hw.repositories.BookCommentRepository;
-import ru.otus.hw.services.BookService;
+import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.services.CommentServiceImpl;
 
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class CommentsRestController {
-    private final BookService bookService;
+    private final BookRepository bookRepository;
 
     private final CommentServiceImpl commentService;
 
@@ -34,8 +34,10 @@ public class CommentsRestController {
 
     @GetMapping("/api/v1/books/comments")
     public Flux<BookCommentDto> getCommentsForBook(@RequestParam("bookId") String bookId) {
-        return Mono.just(bookId)
-                .flatMap(bookService::findById)
+        return bookRepository.findById(bookId)
+                .switchIfEmpty(Mono.error(
+                        new EntityNotFoundException("Не найдена книга с id=%s".formatted(bookId)))
+                )
                 .flatMapMany(book -> commentRepository.findByBookId(bookId).map(BookCommentDto::fromDomainObject));
     }
 
@@ -48,10 +50,12 @@ public class CommentsRestController {
             return Mono.just(new EntitySaveResult<>(bindingResult)); // выкидываем на клиента ошибки валидации
         }
 
-        Mono<BookComment> commentMono = bookService.findById(bookId)
-                                            .flatMap(book -> commentService.saveComment(book, commentDto));
-
-        return commentMono.map(BookCommentDto::fromDomainObject)
+        return bookRepository.findById(bookId)
+                    .switchIfEmpty(Mono.error(
+                            new EntityNotFoundException("Не найдена книга с id=%s".formatted(bookId)))
+                    )
+                    .flatMap(book -> commentService.saveComment(book, commentDto))
+                    .map(BookCommentDto::fromDomainObject)
                     .map(dtoComment -> new EntitySaveResult<>(SaveResults.SUCCESS.getName(), dtoComment, null))
                     .doOnError(ex -> System.out.println("Ошибка сохранения: " + ex.getMessage()))
                     .onErrorResume(ex -> Mono.just(

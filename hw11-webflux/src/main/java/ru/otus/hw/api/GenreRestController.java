@@ -11,19 +11,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.dto.GenreDto;
 import ru.otus.hw.repositories.BookRepository;
 import ru.otus.hw.repositories.GenreRepository;
-import ru.otus.hw.services.GenreService;
 
 @RestController
 @RequiredArgsConstructor
 public class GenreRestController {
     private final GenreRepository genreRepository;
-
-    private final GenreService genreService;
 
     private final BookRepository bookRepository;
 
@@ -34,7 +32,10 @@ public class GenreRestController {
 
     @GetMapping("/api/v1/genres/{id}")
     public Mono<GenreDto> getGenreById(@PathVariable(required = false) String id) {
-        return genreService.findById(id).map(GenreDto::fromDomainObject);
+        return genreRepository.findById(id)
+                .switchIfEmpty(Mono.error(
+                        new EntityNotFoundException("Не найден жанр с id=%s".formatted(id))))
+                .map(GenreDto::fromDomainObject);
     }
 
     @PostMapping(value = "/api/v1/genres", consumes = "application/json;charset=UTF-8",

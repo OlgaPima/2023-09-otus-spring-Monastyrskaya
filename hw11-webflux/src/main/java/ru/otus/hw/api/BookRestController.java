@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookCommentRepository;
 import ru.otus.hw.repositories.BookRepository;
-import ru.otus.hw.services.AuthorServiceImpl;
-import ru.otus.hw.services.BookService;
-import ru.otus.hw.services.GenreService;
+import ru.otus.hw.repositories.GenreRepository;
 
 @RestController
 @RequiredArgsConstructor
 public class BookRestController {
-    private final AuthorServiceImpl authorService;
+    private final AuthorRepository authorRepository;
 
-    private final GenreService genreService;
+    private final GenreRepository genreRepository;
 
-    private final BookService bookService;
+//    private final BookService bookService;
 
     private final BookRepository bookRepository;
 
@@ -40,7 +40,10 @@ public class BookRestController {
 
     @GetMapping("/api/v1/books/{id}")
     public Mono<BookDto> getBookById(@PathVariable(required = false) String id) {
-        return bookService.findById(id).map(BookDto::fromDomainObject);
+        return bookRepository.findById(id)
+                .switchIfEmpty(Mono.error(
+                        new EntityNotFoundException("Не найдена книга с id=%s".formatted(id)))
+                ).map(BookDto::fromDomainObject);
     }
 
     @PostMapping(value = "/api/v1/books", consumes = "application/json;charset=UTF-8",
@@ -50,8 +53,15 @@ public class BookRestController {
             return Mono.just(new EntitySaveResult<>(bindingResult)); // выкидываем ошибки валидации на клиента
         }
 
-        return authorService.findById(bookDto.getAuthor().getId())
-                .then(genreService.findById(bookDto.getGenre().getId()))
+        String bookId = bookDto.getGenre().getId();
+        return authorRepository.findById(bookId)
+                .switchIfEmpty(Mono.error(
+                        new EntityNotFoundException("Не найден автор с id=%s".formatted(bookDto.getAuthor().getId())))
+                )
+                .then(genreRepository.findById(bookId)
+                        .switchIfEmpty(Mono.error(
+                                new EntityNotFoundException("Не найден жанр с id=%s".formatted(bookId))))
+                )
                 .then(bookRepository.save(bookDto.toDomainObject())
                         .map(BookDto::fromDomainObject)
                         .map(savedBook -> new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedBook, null))
