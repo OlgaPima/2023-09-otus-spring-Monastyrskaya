@@ -14,8 +14,6 @@ de:
 mongock:
   runner-type: "ApplicationRunner" # default
   #runner-type: "InitializingBean"
-  change-logs-scan-package:
-    - test.changelogs
   mongo-db:
     write-concern:
       journal: false

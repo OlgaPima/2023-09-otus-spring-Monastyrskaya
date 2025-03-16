@@ -34,7 +34,7 @@ public class AuthorControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private AuthorServiceImpl authorService;
+    private AuthorService authorService;
 
     private final List<Author> authors = List.of(
             new Author("1", "С. Кинг", 1947),
