@@ -36,7 +36,7 @@ public class AuthorServiceImpl implements AuthorService {
         findById(id);
         // Проверка, что к нему не привязано ни одной книги:
         if (bookRepository.existsByAuthorId(id)) {
-            throw new HasChildEntitiesException("Удаление невозможно: к автору привязаны книги. " +
+            throw new HasChildEntitiesException(id, "Удаление невозможно: к автору привязаны книги. " +
                     "Сначала нужно удалить книги этого автора");
         }
         authorRepository.deleteById(id);
