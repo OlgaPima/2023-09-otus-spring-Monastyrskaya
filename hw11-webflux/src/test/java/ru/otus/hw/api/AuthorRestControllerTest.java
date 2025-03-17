@@ -1,96 +1,103 @@
-//package ru.otus.hw.services;
-//
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.test.web.servlet.MockMvc;
-//import ru.otus.hw.models.Author;
-//import ru.otus.hw.models.dto.AuthorDto;
-//
-//import java.util.List;
-//
-//import static org.hamcrest.Matchers.containsString;
-//import static org.mockito.Mockito.*;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-//
-//
-//@AutoConfigureMockMvc
-//@SpringBootTest
-//@DisplayName("AuthorController: ")
-//public class AuthorControllerTest {
-//
-//    @Autowired
-//    private MockMvc mvc;
-//
-//    @MockBean
-//    private AuthorServiceImpl authorService;
-//
-//    private final List<Author> authors = List.of(
-//            new Author("1", "С. Кинг", 1947),
-//            new Author("2", "Ф. Купер", 1789),
-//            new Author("3", "Л.Н. Толстой", 1828)
-//    );
-//
-//    @Test
-//    @DisplayName("отображение списка всех авторов")
-//    public void shouldReturnCorrectAuthorsList() throws Exception {
-//        when(authorService.findAll()).thenReturn(authors);
-//        this.mvc.perform(get("/authors"))
-//                .andExpect(status().isOk())
-//                .andExpect(view().name("authorsList"))
-//                .andExpect(model().attribute("authors", authors));
-//    }
-//
-//    @Test
-//    @DisplayName("отображение страницы редактирования автора")
-//    public void shouldFillAuthorEditPage() throws Exception {
-//        var testAuthor = authors.get(0);
-//        when(authorService.findById("1")).thenReturn(testAuthor);
-//        mvc.perform(get("/authors/edit").param("id", "1"))
-//                .andExpect(status().isOk())
-//                .andExpect(view().name("authorEdit"))
-//                .andExpect(model().attribute("author", testAuthor))
-//                .andExpect(content().string(containsString(testAuthor.getFullName())));
-//    }
-//
-//    // TODO: разобраться
-////    @Test
-////    @DisplayName("сохранение нового автора и переадресация на список всех авторов")
-////    public void shouldCreateAuthorAndRedirectToAuthorsList() throws Exception {
-////        var testAuthor = authors.get(0);
-////        this.mvc.perform(post("/authors/edit")
-////                        .flashAttr("author", testAuthor.toDtoObject()))
-////                .andExpect(status().isFound())
-////                .andExpect(redirectedUrl("/authors"));
-////
-////        verify(authorService, times(1)).save(eq(testAuthor));
-////    }
-////
-////    @Test
-////    @DisplayName("нельзя сохранять автора с ошибками")
-////    public void shouldNotCreateAuthorWithError() throws Exception {
-////        var authorDto = new AuthorDto("1", "", 1993);
-////        this.mvc.perform(post("/authors/edit")
-////                        .flashAttr("author", authorDto))
-////                .andExpect(status().isOk())
-////                .andExpect(view().name("authorEdit"));
-////
-////        verify(authorService, times(0)).save(eq(authorDto.toDomainObject()));
-////    }
-//
-//    @Test
-//    @DisplayName("удаление автора и переадресация на список всех авторов")
-//    public void shouldDeleteAuthorAndRedirectToAuthorsList() throws Exception {
-//        String authorId = "1";
-//        mvc.perform(get("/authors/delete?id=" + authorId))
-//                .andExpect(status().isFound())
-//                .andExpect(redirectedUrl("/authors"));
-//
-//        verify(authorService, times(1)).deleteById(eq(authorId));
-//    }
-//}
+package ru.otus.hw.api;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.otus.hw.exceptions.EntityNotFoundException;
+import ru.otus.hw.models.dto.AuthorDto;
+import ru.otus.hw.repositories.AuthorRepository;
+import ru.otus.hw.repositories.BookRepository;
+
+import java.util.List;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+
+
+@WebFluxTest
+@ContextConfiguration(classes = {AuthorRestController.class})
+@DisplayName("AuthorRestController: ")
+public class AuthorRestControllerTest {
+
+    @Autowired
+    private WebTestClient webTestClient;
+
+    @MockBean
+    private AuthorRepository authorRepository;
+
+    @MockBean
+    private BookRepository bookRepository;
+
+    private final List<AuthorDto> authorsDtoList = List.of(
+            new AuthorDto("1", "С. Кинг", 1947),
+            new AuthorDto("2", "Ф. Купер", 1789)
+    );
+
+    @Test
+    @DisplayName("должен возвращать список всех авторов")
+    public void shouldReturnAllAuthorsList() {
+        when(authorRepository.findAll()).thenReturn(Flux.fromStream(
+                authorsDtoList.stream().map(AuthorDto::toDomainObject)));
+
+        webTestClient.get().uri("/api/v1/authors")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(AuthorDto.class)
+                .hasSize(2)
+                .isEqualTo(authorsDtoList);
+        verify(authorRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("должен находить автора по id")
+    public void shouldFindAuthorById() {
+        when(authorRepository.findById(authorsDtoList.get(0).getId()))
+                .thenReturn(Mono.just(authorsDtoList.get(0).toDomainObject()));
+
+        webTestClient.get().uri("/api/v1/authors/{id}", authorsDtoList.get(0).getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(AuthorDto.class)
+                .isEqualTo(authorsDtoList.get(0));
+
+        verify(authorRepository, times(1)).findById(authorsDtoList.get(0).getId());
+    }
+
+    @Test
+    @DisplayName("должен выдавать ошибку, если автор не найден")
+    void shouldReturnErrorWhenAuthorNotFound() {
+        String authorId = "badId";
+        when(authorRepository.findById(authorId)).thenReturn(Mono.error(new EntityNotFoundException("")));
+
+        webTestClient.get().uri("/api/v1/authors/{id}", authorId)
+                .exchange()
+                .expectStatus()
+                .is5xxServerError();
+    }
+
+    @Test
+    @DisplayName("должен удалять автора")
+    public void shouldDeleteAuthor() {
+        var testedAuthorId = authorsDtoList.get(1).getId();
+        when(bookRepository.existsByAuthorId(testedAuthorId)).thenReturn(Mono.just(false));
+        when(authorRepository.deleteById(testedAuthorId)).thenReturn(Mono.empty());
+
+        webTestClient.delete().uri("/api/v1/authors/{id}", testedAuthorId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Void.class);
+
+        verify(authorRepository,times(1)).deleteById(testedAuthorId);
+    }
+}

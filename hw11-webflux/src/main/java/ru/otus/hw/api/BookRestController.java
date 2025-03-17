@@ -27,8 +27,6 @@ public class BookRestController {
 
     private final GenreRepository genreRepository;
 
-//    private final BookService bookService;
-
     private final BookRepository bookRepository;
 
     private final BookCommentRepository commentRepository;
