@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.models.EntitySaveError;
@@ -41,13 +42,8 @@ public class GenreRestController {
             return new EntitySaveResult<>(bindingResult); // выкидываем ошибки валидации на клиента
         }
 
-        try {
-            var savedGenreDto = genreService.save(genreDto);
-            return new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedGenreDto, null);
-        } catch (Exception e) {
-            return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
-                    List.of(new EntitySaveError(null, e.getMessage())));
-        }
+        var savedGenreDto = genreService.save(genreDto);
+        return new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedGenreDto, null);
     }
 
     @DeleteMapping("/api/v1/genres/{id}")
@@ -58,5 +54,11 @@ public class GenreRestController {
         } catch (HasChildEntitiesException e) {
             return false;
         }
+    }
+
+    @ExceptionHandler(Exception.class)
+    public EntitySaveResult<GenreDto> cannotSaveGenre(Exception ex) {
+        return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
+                List.of(new EntitySaveError(null, ex.getMessage())));
     }
 }

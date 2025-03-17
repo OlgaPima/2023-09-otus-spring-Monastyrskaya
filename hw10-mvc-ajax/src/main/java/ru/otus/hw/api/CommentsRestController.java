@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.otus.hw.models.BookComment;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.dto.BookCommentDto;
@@ -47,24 +48,25 @@ public class CommentsRestController {
             return new EntitySaveResult<>(bindingResult); // выкидываем на клиента ошибки валидации
         }
 
-        try {
-            BookComment savedComment;
-            if (commentDto.getId() == null || commentDto.getId().isBlank()) {
-                savedComment = commentService.insert(commentDto.getCommentText(), bookId);
-            } else {
-                savedComment = commentService.update(Long.parseLong(commentDto.getId()), commentDto.getCommentText());
-            }
-            return new EntitySaveResult<>(SaveResults.SUCCESS.getName(),
-                    BookCommentDto.fromDomainObject(savedComment), null);
-        } catch (Exception e) {
-            return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
-                    List.of(new EntitySaveError(null, e.getMessage())));
+        BookComment savedComment;
+        if (commentDto.getId() == null || commentDto.getId().isBlank()) {
+            savedComment = commentService.insert(commentDto.getCommentText(), bookId);
+        } else {
+            savedComment = commentService.update(Long.parseLong(commentDto.getId()), commentDto.getCommentText());
         }
+        return new EntitySaveResult<>(SaveResults.SUCCESS.getName(),
+                BookCommentDto.fromDomainObject(savedComment), null);
     }
 
 
     @DeleteMapping("/api/v1/books/comments/{commentId}")
     public void deleteComment(@PathVariable("commentId") Long commentId) {
         commentService.delete(commentId);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public EntitySaveResult<BookCommentDto> cannotSaveComment(Exception ex) {
+        return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
+                List.of(new EntitySaveError(null, ex.getMessage())));
     }
 }

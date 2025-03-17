@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Book;
@@ -47,13 +48,8 @@ public class BookRestController {
             return new EntitySaveResult<>(bindingResult); // выкидываем ошибки валидации на клиента
         }
 
-        try {
-            var savedBookDto = bookService.save(bookDto);
-            return new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedBookDto, null);
-        } catch (Exception e) {
-            return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
-                    List.of(new EntitySaveError(null, e.getMessage())));
-        }
+        var savedBookDto = bookService.save(bookDto);
+        return new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedBookDto, null);
     }
 
     @DeleteMapping("/api/v1/books/{id}")
@@ -64,5 +60,11 @@ public class BookRestController {
         } catch (HasChildEntitiesException e) {
             return false;
         }
+    }
+
+    @ExceptionHandler(Exception.class)
+    public EntitySaveResult<BookDto> cannotSaveBook(Exception ex) {
+        return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
+                List.of(new EntitySaveError(null, ex.getMessage())));
     }
 }

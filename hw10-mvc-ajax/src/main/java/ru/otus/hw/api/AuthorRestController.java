@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.EntitySaveError;
@@ -43,14 +44,8 @@ public class AuthorRestController {
             return new EntitySaveResult<>(bindingResult); // выкидываем ошибки валидации на клиента
         }
 
-        try {
-            var savedAuthorDto = authorService.save(authorDto);
-            return new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedAuthorDto, null);
-        } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
-            return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
-                    List.of(new EntitySaveError(null, e.getMessage())));
-        }
+        var savedAuthorDto = authorService.save(authorDto);
+        return new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedAuthorDto, null);
     }
 
     @DeleteMapping("/api/v1/authors/{id}")
@@ -61,5 +56,11 @@ public class AuthorRestController {
         } catch (HasChildEntitiesException e) {
             return false;
         }
+    }
+
+    @ExceptionHandler(Exception.class)
+    public EntitySaveResult<AuthorDto> cannotSaveAuthor(Exception ex) {
+        return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
+                List.of(new EntitySaveError(null, ex.getMessage())));
     }
 }
