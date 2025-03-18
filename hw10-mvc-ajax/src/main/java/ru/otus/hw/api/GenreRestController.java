@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.otus.hw.exceptions.EntityNotFoundException;
 import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Genre;
 import ru.otus.hw.models.EntitySaveError;
 import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.dto.GenreDto;
+import ru.otus.hw.models.dto.RowDeleteResultDto;
 import ru.otus.hw.services.GenreService;
 
 import java.util.List;
@@ -47,16 +49,16 @@ public class GenreRestController {
     }
 
     @DeleteMapping("/api/v1/genres/{id}")
-    public boolean deleteGenre(@PathVariable("id") Long id) {
+    public RowDeleteResultDto deleteGenre(@PathVariable("id") Long id) {
         try {  // удаление жанра - проверяем, есть ли книги, если есть - блокируем удаление и выводим ошибку:
             genreService.deleteById(id);
-            return true;
+            return new RowDeleteResultDto(true);
         } catch (HasChildEntitiesException e) {
-            return false;
+            return new RowDeleteResultDto(false);
         }
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({Exception.class, EntityNotFoundException.class})
     public EntitySaveResult<GenreDto> cannotSaveGenre(Exception ex) {
         return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
                 List.of(new EntitySaveError(null, ex.getMessage())));

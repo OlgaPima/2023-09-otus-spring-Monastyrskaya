@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.otus.hw.exceptions.EntityNotFoundException;
-import ru.otus.hw.exceptions.HasChildEntitiesException;
 import ru.otus.hw.models.Book;
 import ru.otus.hw.models.Errors;
 import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.EntitySaveError;
 import ru.otus.hw.models.dto.BookDto;
+import ru.otus.hw.models.dto.RowDeleteResultDto;
 import ru.otus.hw.services.BookService;
 
 import java.util.List;
@@ -53,17 +53,13 @@ public class BookRestController {
     }
 
     @DeleteMapping("/api/v1/books/{id}")
-    public boolean deleteBook(@PathVariable("id") Long id) {
-        try {
-            bookService.deleteById(id);
-            return true;
-        } catch (HasChildEntitiesException e) {
-            return false;
-        }
+    public RowDeleteResultDto deleteBook(@PathVariable("id") Long id) {
+        bookService.deleteById(id); // может вылететь EntityNotFoundException
+        return new RowDeleteResultDto(true);
     }
 
-    @ExceptionHandler(Exception.class)
-    public EntitySaveResult<BookDto> cannotSaveBook(Exception ex) {
+    @ExceptionHandler({Exception.class, EntityNotFoundException.class})
+    public EntitySaveResult<BookDto> cannotSaveOrDeleteBook(Exception ex) {
         return new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
                 List.of(new EntitySaveError(null, ex.getMessage())));
     }

@@ -15,6 +15,7 @@ import ru.otus.hw.models.EntitySaveResult;
 import ru.otus.hw.models.EntitySaveError;
 import ru.otus.hw.models.SaveResults;
 import ru.otus.hw.models.dto.AuthorDto;
+import ru.otus.hw.models.dto.RowDeleteResultDto;
 import ru.otus.hw.services.AuthorService;
 
 import java.util.List;
@@ -49,12 +50,12 @@ public class AuthorRestController {
     }
 
     @DeleteMapping("/api/v1/authors/{id}")
-    public boolean deleteAuthor(@PathVariable("id") Long id) {
+    public RowDeleteResultDto deleteAuthor(@PathVariable("id") Long id) {
         try {  // удаление автора - проверяем, есть ли книги, если есть - блокируем удаление и выводим ошибку:
             authorService.deleteById(id);
-            return true;
+            return new RowDeleteResultDto(true);
         } catch (HasChildEntitiesException e) {
-            return false;
+            return new RowDeleteResultDto(false);
         }
     }
 
