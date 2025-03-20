@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Список авторов</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/bootstrap/bootstrap.min.css">
+    <script type="text/javascript" src="../static/script/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/script/menu.js"></script>
+</head>
+<body>
+    <div id="menu-placeholder"></div>
+    <br/>
+    <h3>Список авторов</h3>
+    <button type="button" class="btn btn-light btn-create">
+        <a href="genreEdit.html" th:href="@{/authors/edit}">
+            <img src="../static/icons/btn-add.png" alt="" style="margin-left: 4px; margin-right: 4px;"/>
+            добавить
+        </a>
+    </button>
+
+    <table class="list" style="width: 100%;">
+        <thead>
+            <tr>
+                <th style="width:15%;">ID</th>
+                <th>ФИО автора</th>
+                <th style="width:12%; text-align: center">Год рождения</th>
+                <th style="width:18%; text-align: center">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="author : ${authors}">
+                <td th:text="${author.id}">65a038d92c5dd67b621b4681</td>
+                <td th:text="${author.fullName}">Джек Лондон</td>
+                <td th:text="${author.birthYear}" style="text-align: center;">1947</td>
+                <td style="text-align: center;">
+                    <table style="width:100%; border: none !important; padding: 0;">
+                        <tr>
+                            <td style="text-align: right; border: none !important; padding: 0;">
+                                <button type="button" class="btn btn-light btn-grid-action">
+                                    <a href="authorEdit.html" th:href="@{/authors/edit(id=${author.id})}" title="Редактировать">
+                                        <img src="../static/icons/edit.png" alt=""/></a>
+                                </button>
+                            </td>
+                            <td style="text-align: left; border: none !important; padding: 0;">
+                                <form th:action="@{/authors/delete(id=${author.id})}" th:method="post" title="Удалить">
+                                    <button type="submit" class="btn btn-light btn-grid-action">
+                                        <img src="../static/icons/delete.png" alt=""/>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div th:if="${cannotDelId == author.id}" role="alert"
+                         class="alert alert-danger alert-dismissible fade show error-dialog">
+                        Есть книги данного автора, удаление невозможно
+                        <button type="button" class="btn-close btn-close-padding" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
