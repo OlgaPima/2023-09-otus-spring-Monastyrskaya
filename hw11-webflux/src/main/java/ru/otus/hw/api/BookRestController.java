@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.hw.exceptions.EntityNotFoundException;
-import ru.otus.hw.models.SaveResults;
-import ru.otus.hw.models.EntitySaveResult;
+import ru.otus.hw.models.*;
 import ru.otus.hw.models.dto.BookDto;
 import ru.otus.hw.repositories.AuthorRepository;
 import ru.otus.hw.repositories.BookCommentRepository;
@@ -51,23 +50,25 @@ public class BookRestController {
             return Mono.just(new EntitySaveResult<>(bindingResult)); // выкидываем ошибки валидации на клиента
         }
 
-        String bookId = bookDto.getGenre().getId();
-        return authorRepository.findById(bookId)
-                .switchIfEmpty(Mono.error(
-                        new EntityNotFoundException("Не найден автор с id=%s".formatted(bookDto.getAuthor().getId())))
-                )
-                .then(genreRepository.findById(bookId)
-                        .switchIfEmpty(Mono.error(
-                                new EntityNotFoundException("Не найден жанр с id=%s".formatted(bookId))))
-                )
-                .then(bookRepository.save(bookDto.toDomainObject())
-                        .map(BookDto::fromDomainObject)
-                        .map(savedBook -> new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedBook, null))
-                        .onErrorResume(ex -> {
-                            System.out.println("Ошибка сохранения книги: " + ex.getMessage());
-                            return Mono.just(new EntitySaveResult<>(SaveResults.ERROR.getName(), null, null));
-                        })
-                );
+        String authorId = bookDto.getAuthor().getId();
+        String genreId = bookDto.getGenre().getId();
+
+        Mono<Boolean> authorMono = authorRepository.existsById(authorId)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("Не найден автор с id=%s".formatted(authorId))));
+
+        Mono<Boolean> genreMono = genreRepository.existsById(genreId)
+                .switchIfEmpty(Mono.error(new EntityNotFoundException("Не найден жанр с id=%s".formatted(genreId))));
+
+        return Mono.zip(authorMono, genreMono)
+                .flatMap(tuple -> {
+                    Book book = bookDto.toDomainObject();
+                    return bookRepository.save(book)
+                            .map(BookDto::fromDomainObject)
+                            .map(savedBook -> new EntitySaveResult<>(SaveResults.SUCCESS.getName(), savedBook, null))
+                            .onErrorResume(ex ->
+                                    Mono.just(new EntitySaveResult<>(SaveResults.ERROR.getName(), null, null))
+                            );
+                });
     }
 
     @DeleteMapping("/api/v1/books/{id}")

@@ -57,7 +57,6 @@ public class CommentsRestController {
                     .flatMap(book -> commentService.saveComment(book, commentDto))
                     .map(BookCommentDto::fromDomainObject)
                     .map(dtoComment -> new EntitySaveResult<>(SaveResults.SUCCESS.getName(), dtoComment, null))
-                    .doOnError(ex -> System.out.println("Ошибка сохранения: " + ex.getMessage()))
                     .onErrorResume(ex -> Mono.just(
                             new EntitySaveResult<>(SaveResults.ERROR.getName(), null,
                                     List.of(new EntitySaveError(null, ex.getMessage())))
