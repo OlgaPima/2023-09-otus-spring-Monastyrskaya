@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Информация об авторе</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="../static/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="../static/script/menu.js"></script>
+    <script type="text/javascript" src="../static/script/bookEdit.js"></script>
+    <script type="text/javascript" src="../static/script/editForm.js"></script>
+</head>
+<body>
+
+<!-- Редактирование книги -->
+<form id="edit-form" onsubmit="save(this, new URLSearchParams(window.location.search).get('id')); return false;"
+      data-return-url="/books" data-save-url="/api/v1/books">
+    <div id="menu-placeholder"></div>
+    <br/>
+    <h3 id="action-header" data-add-text="Добавление книги">Редактирование книги</h3>
+
+    <table class="form-table">
+        <tr id="tr-rowId">
+            <td style="width: 150px;"><label>Идентификатор</label></td>
+            <td style="width: 400px;">
+                <label id="label-rowId" style="width:100%"></label>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><label for="input-title">Название</label></td>
+            <td style="width:400px;"><input id="input-title" name="title" type="text" class="form-control"/></td>
+            <td><label id="label-validator-title" class="errors" style="width: 100%; display: none;">
+                    Некорректное название книги</label>
+            </td>
+        </tr>
+            <tr>
+                <td><label for="select-author" style="width: 100%;">Автор</label></td>
+                <td style="width: 400px;"><select id="select-author" name="author" class="form-select">
+                        <option value="">--Выберите--</option>
+                    </select>
+                </td>
+                <td><label id="label-validator-author" class="errors" style="width: 100%; display: none;">
+                        Поле обязательно для заполнения</label>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="select-genre" style="width: 100%;">Жанр</label></td>
+                <td style="width: 400px;"><select id="select-genre" name="genre" class="form-select">
+                        <option value="">--Выберите--</option>
+                    </select>
+                </td>
+                <td><label id="label-validator-genre" class="errors" style="width: 100%; display: none;">
+                        Поле обязательно для заполнения</label>
+                </td>
+            </tr>
+    </table>
+
+    <div class="horizontal-divider top15px"></div>
+
+    <label id="label-server-error" class="errors" style="width: 400px; display: none;">
+        Какая-то страшная ошибка сохранения (ну там база упала или сеть)...
+    </label>
+
+    <div class="top15px">
+        <button type="submit" class="btn btn-success right15px" style="width: 120px">Сохранить</button>
+        <a href="/books">
+            <button type="button" class="btn btn-secondary right15px" style="width: 120px">Отмена</button></a>
+    </div>
+</form>
+
+</body>
+</html>

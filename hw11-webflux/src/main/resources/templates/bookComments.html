@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Комментарии к книге</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/bootstrap/bootstrap.min.css">
+    <script type="text/javascript" src="../static/script/bootstrap/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/script/menu.js"></script>
+    <script type="text/javascript" src="../static/script/lists.js"></script>
+    <script type="text/javascript" src="../static/script/comments.js"></script>
+</head>
+<body>
+    <div id="menu-placeholder"></div>
+    <br/>
+    <h3 style="margin-bottom: 10px;">Отзывы</h3>
+    <h5><b><i>
+            <label id="label-book" style="width: 100%; margin-bottom: 10px; color: #5c636a">Ф. Купер &quot;Зверобой&quot;</label>
+        </i></b>
+    </h5>
+
+    <table class="list" style="width: 100%; margin-bottom: 20px;">
+        <thead>
+            <tr>
+                <th style="width:15%;">ID</th>
+                <th>Текст отзыва</th>
+                <th style="width: 160px; text-align: center;">Действия</th>
+            </tr>
+        </thead>
+        <tbody id="comments-tbody">
+        </tbody>
+    </table>
+
+    <form id="edit-form" onsubmit="" data-save-url="/api/v1/books/comments">
+        <table style="width: 50%;">
+            <tr>
+                <td style="padding-bottom: 5px; color: #5c636a"><b><i id="save-comment-label">Добавьте новый отзыв:</i></b></td>
+            </tr>
+            <tr><td>
+                    <textarea id="textarea-comment-text" name="commentText" rows="4" class="form-control"></textarea>
+                    <label id="label-validator-commentText" class="errors" style="width: 100%; display: none;">
+                        Поле обязательно для заполнения
+                    </label>
+                </td>
+            </tr>
+            <tr><td style="text-align: right; width: 50%;">
+                    <button type="submit" id="btn-save" class="btn btn-light btn-create" style="margin-top: 5px;">
+                            <img src="../static/icons/save.png" alt="" style="margin-left: 4px;"/>
+                            <label style="color: #0d6efd"><b>Сохранить</b></label></a>
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+        <label id="label-server-error" class="errors" style="width: 300px; display: none;">
+            Какая-то страшная ошибка сохранения (ну там база упала или сеть)...
+        </label>
+    </form>
+
+
+    <script>
+        const bookId = new URLSearchParams(window.location.search).get("bookId");
+        // Заполняем атрибуты книги
+        $.get('/api/v1/books/' + bookId).done(
+            function (book) {
+                $("#label-book").text(book.author.fullName + " \"" + book.title + "\"");
+            }
+        );
+
+        // Заполняем список комментариев
+        refreshGrid();
+
+        function refreshGrid() { // эта функция будет вызываться еще в файле comments.js
+            $.get('/api/v1/books/comments?bookId=' + bookId).done(
+                function (comments) {
+                    comments.forEach(
+                        function (comment) {
+                            $("#comments-tbody").append(`
+            <tr id="tr-${comment.id}">
+                <td>${comment.id}</td>
+                <td id="${'td-comment-text-' + comment.id}">${comment.commentText}</td>
+                <td style="text-align: center;">
+                    <button type="button" class="btn btn-light btn-grid-action">
+                        <a data-row-id="${comment.id}" title="Редактировать" onclick="editComment(this); return false;">
+                            <img src="../static/icons/edit.png" alt=""/>
+                        </a>
+                    </button>
+                    <button type="button" class="btn btn-light btn-grid-action">
+                        <a data-row-id="${comment.id}" href="/api/v1/books/comments/${comment.id}"
+                            title="Удалить" onclick="deleteWithConfirm(this); return false;">
+                            <img src="../static/icons/delete.png" alt=""/>
+                        </a>
+                    </button>
+                </td>
+            </tr>
+                            `)
+                        }
+                    );
+                }
+            );
+        }
+    </script>
+
+</body>
+</html>
