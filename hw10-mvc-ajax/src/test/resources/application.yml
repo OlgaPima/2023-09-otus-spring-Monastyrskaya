@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jpa:
+    generate-ddl: false
+    #    generate-ddl: true
+    hibernate:
+      ddl-auto: none
