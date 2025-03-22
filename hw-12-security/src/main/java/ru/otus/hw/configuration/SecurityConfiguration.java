@@ -17,14 +17,6 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
-//                .authorizeHttpRequests((authorize) -> authorize
-//                        .requestMatchers("/login").permitAll()
-//                        .requestMatchers("/",
-//                                "/authors/*",
-//                                "/genres/*",
-//                                "/books/*"
-//                        ).authenticated()
-//                )
             .formLogin(Customizer.withDefaults());
         return http.build();
     }
