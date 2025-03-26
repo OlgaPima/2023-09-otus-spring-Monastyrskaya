@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Информация об авторе</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link href="../static/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="../static/script/menu.js"></script>
+</head>
+<body>
+
+<!-- Редактирование книги -->
+<form id="edit-form" action="bookEdit.html" th:method="post" th:action="@{/books/edit(id=${book.id})}" th:object="${book}">
+    <div id="menu-placeholder"></div>
+    <br/>
+    <h3 th:if="${book.id}">Редактирование книги</h3>
+    <h3 th:unless="${book.id}">Добавление книги</h3>
+
+    <table class="form-table">
+        <tr>
+            <td style="width: 150px;"><label th:if="${book.id}">Идентификатор</label></td>
+            <td style="width: 300px;">
+                <label th:text="*{id}" style="width:100%">65a038d92c5dd67b621b4681</label>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><label for="book-name-input">Название</label></td>
+            <td><input id="book-name-input" name="title" type="text" th:value="*{title}" style="width:100%"
+                       value="Белый Клык" class="form-control"/>
+            </td>
+            <td><label class="errors" th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="width: 100%;">
+                    Некорректное ФИО автора
+                </label>
+            </td>
+        </tr>
+            <tr>
+                <td><label style="width: 100%;">Автор</label></td>
+                <td>
+                    <select th:field="*{author}" class="form-select">>
+                        <option value="">--Выберите--</option>
+                        <option th:each="author : ${authorsList}" th:value="${author.id}"
+                            th:text="${author.fullName}"></option>
+                    </select>
+                </td>
+                <td>
+                    <label class="errors" th:if="${#fields.hasErrors('author')}" th:errors="*{author}" style="width: 300px;">
+                        Поле обязательно для заполнения
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td><label style="width: 100%;">Жанр</label></td>
+                <td>
+                    <select th:field="*{genre}" class="form-select">>
+                        <option value="">--Выберите--</option>
+                        <option th:each="genre : ${genresList}" th:value="${genre.id}"
+                                th:text="${genre.name}"></option>
+                    </select>
+                </td>
+                <td>
+                    <label class="errors" th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}" style="width: 300px;">
+                        Поле обязательно для заполнения
+                    </label>
+                </td>
+            </tr>
+    </table>
+
+    <div class="horizontal-divider top15px"></div>
+
+    <div class="top15px">
+        <button type="submit" class="btn btn-success right15px" style="width: 120px">Сохранить</button>
+        <a href="booksList.html" th:href="@{/books}">
+            <button type="button" class="btn btn-secondary right15px" style="width: 120px">Отмена</button></a>
+    </div>
+</form>
+
+</body>
+</html>
