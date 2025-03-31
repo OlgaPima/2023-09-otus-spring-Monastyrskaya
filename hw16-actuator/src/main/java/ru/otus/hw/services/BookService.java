@@ -13,4 +13,6 @@ public interface BookService {
     Book save(Book book);
 
     void deleteById(String id);
+
+    Boolean hasBooks();
 }

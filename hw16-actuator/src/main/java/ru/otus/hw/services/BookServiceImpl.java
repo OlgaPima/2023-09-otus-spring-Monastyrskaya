@@ -38,6 +38,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Boolean hasBooks() {
+        return bookRepository.count() > 0;
+    }
+
+    @Override
     @Transactional
     @Secured("ROLE_ADMIN")
     public void deleteById(String id) {
