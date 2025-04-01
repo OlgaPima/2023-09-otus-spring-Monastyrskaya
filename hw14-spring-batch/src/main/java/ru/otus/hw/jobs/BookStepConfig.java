@@ -16,14 +16,11 @@ import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilde
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.transaction.PlatformTransactionManager;
 import ru.otus.hw.mappers.EntityMapper;
-import ru.otus.hw.models.mongo.AuthorMongo;
 import ru.otus.hw.models.mongo.BookMongo;
-import ru.otus.hw.models.mongo.GenreMongo;
 import ru.otus.hw.models.sql.BookH2;
+import ru.otus.hw.service.EntityRelationsService;
 
 import java.util.UUID;
 
@@ -40,6 +37,8 @@ public class BookStepConfig {
     private final PlatformTransactionManager platformTransactionManager;
 
     private final EntityMapper entityMapper;
+
+    private final EntityRelationsService relationsService;
 
     private final MongoTemplate mongoTemplate;
 
@@ -85,18 +84,10 @@ public class BookStepConfig {
         return bookH2 -> {
             var bookMongo = entityMapper.toBookMongo(bookH2);
             bookMongo.setId(UUID.randomUUID().toString());
-            EntityRelations.getInstance().addBookIdMapping(bookH2.getId(), bookMongo.getId());
+            relationsService.addBookIdMapping(bookH2.getId(), bookMongo.getId());
 
-            String authorMongoId = EntityRelations.getInstance().getAuthorMongoId(bookH2.getAuthor().getId());
-            var queryAuthor = new Query(Criteria.where("id").is(authorMongoId));
-            var authorMongo = mongoTemplate.findOne(queryAuthor, AuthorMongo.class, "authors");
-            bookMongo.setAuthor(authorMongo);
-
-            String genreMongoId = EntityRelations.getInstance().getGenreMongoId(bookH2.getGenre().getId());
-            var queryGenre = new Query(Criteria.where("id").is(genreMongoId));
-            var genreMongo = mongoTemplate.findOne(queryGenre, GenreMongo.class, "genres");
-            bookMongo.setGenre(genreMongo);
-
+            bookMongo.setAuthor(relationsService.createAuthorMongo(bookH2.getAuthor()));
+            bookMongo.setGenre(relationsService.createGenreMongo(bookH2.getGenre()));
             return bookMongo;
         };
     }

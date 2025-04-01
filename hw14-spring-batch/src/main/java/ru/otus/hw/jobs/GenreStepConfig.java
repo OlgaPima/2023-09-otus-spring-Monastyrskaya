@@ -22,6 +22,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import ru.otus.hw.mappers.EntityMapper;
 import ru.otus.hw.models.mongo.GenreMongo;
 import ru.otus.hw.models.sql.GenreH2;
+import ru.otus.hw.service.EntityRelationsService;
 
 import java.util.UUID;
 
@@ -38,6 +39,8 @@ public class GenreStepConfig {
     private final PlatformTransactionManager platformTransactionManager;
 
     private final EntityMapper entityMapper;
+
+    private final EntityRelationsService relationsService;
 
     private final MongoTemplate mongoTemplate;
 
@@ -83,7 +86,7 @@ public class GenreStepConfig {
         return genreH2 -> {
             var genreMongo = entityMapper.toGenreMongo(genreH2);
             genreMongo.setId(UUID.randomUUID().toString());
-            EntityRelations.getInstance().addGenreIdMapping(genreH2.getId(), genreMongo.getId());
+            relationsService.addGenreIdMapping(genreH2.getId(), genreMongo.getId());
             return genreMongo;
         };
     }

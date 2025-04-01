@@ -20,6 +20,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import ru.otus.hw.mappers.EntityMapper;
 import ru.otus.hw.models.mongo.AuthorMongo;
 import ru.otus.hw.models.sql.AuthorH2;
+import ru.otus.hw.service.EntityRelationsService;
 
 import java.util.UUID;
 
@@ -35,6 +36,8 @@ public class AuthorStepConfig {
     private final PlatformTransactionManager platformTransactionManager;
 
     private final EntityMapper entityMapper;
+
+    private final EntityRelationsService relationsService;
 
     private final MongoTemplate mongoTemplate;
 
@@ -80,7 +83,7 @@ public class AuthorStepConfig {
         return authorH2 -> {
             var authorMongo = entityMapper.toAuthorMongo(authorH2);
             authorMongo.setId(UUID.randomUUID().toString());
-            EntityRelations.getInstance().addAuthorIdMapping(authorH2.getId(), authorMongo.getId());
+            relationsService.addAuthorIdMapping(authorH2.getId(), authorMongo.getId());
             return authorMongo;
         };
     }

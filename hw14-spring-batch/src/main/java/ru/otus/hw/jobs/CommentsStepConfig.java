@@ -16,13 +16,11 @@ import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilde
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.transaction.PlatformTransactionManager;
 import ru.otus.hw.mappers.EntityMapper;
 import ru.otus.hw.models.mongo.BookCommentMongo;
-import ru.otus.hw.models.mongo.BookMongo;
 import ru.otus.hw.models.sql.BookCommentH2;
+import ru.otus.hw.service.EntityRelationsService;
 
 import java.util.UUID;
 
@@ -39,6 +37,8 @@ public class CommentsStepConfig {
     private final PlatformTransactionManager platformTransactionManager;
 
     private final EntityMapper entityMapper;
+
+    private final EntityRelationsService relationsService;
 
     private final MongoTemplate mongoTemplate;
 
@@ -84,12 +84,7 @@ public class CommentsStepConfig {
         return commentH2 -> {
             var commentMongo = entityMapper.toCommentMongo(commentH2);
             commentMongo.setId(UUID.randomUUID().toString());
-
-            String bookMongoId = EntityRelations.getInstance().getBookMongoId(commentH2.getBook().getId());
-            var query = new Query(Criteria.where("id").is(bookMongoId));
-            var bookMongo = mongoTemplate.findOne(query, BookMongo.class, "books");
-            commentMongo.setBook(bookMongo);
-
+            commentMongo.setBook(relationsService.createBookMongo(commentH2.getBook()));
             return commentMongo;
         };
     }
