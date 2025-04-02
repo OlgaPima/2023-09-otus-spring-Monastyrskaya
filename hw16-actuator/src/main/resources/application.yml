@@ -1,0 +1,44 @@
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: test
+  jmx:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - metrics
+          - health
+          - logfile
+          - prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
+
+mongock:
+  runner-type: "ApplicationRunner" # default
+#  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.changelogs
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+logging:
+  file:
+    name: ./logs/AppLogs.log
+  level:
+    ROOT: INFO
