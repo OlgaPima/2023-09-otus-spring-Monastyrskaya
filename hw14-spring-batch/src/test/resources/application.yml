@@ -1,0 +1,49 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+
+  main:
+    allow-circular-references: true
+
+  batch:
+    job:
+      enabled: false
+
+  shell:
+    interactive:
+      enabled: false
+    noninteractive:
+      enabled: false
+    command:
+      version:
+        enabled: false
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+  sql:
+    init:
+      mode: always
+      data-locations: data.sql
+
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  data:
+    mongodb:
+      port: 0
+      database: test
+      host: localhost
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.0.2
