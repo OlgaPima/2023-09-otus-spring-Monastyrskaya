@@ -1,0 +1,10 @@
+docker image ls
+docker pull bellsoft/liberica-openjdk-alpine-musl:17.0.13
+
+docker ps
+docker ps -all
+
+curl http://localhost:8080/authors
+
+docker compose up -d
+
